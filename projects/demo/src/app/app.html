@@ -1,0 +1,37 @@
+<header class="demo-header">
+  <div class="demo-header__brand">
+    <a routerLink="/" class="demo-header__logo">ngx-datatables-net</a>
+    <span class="demo-header__tag">Angular DataTables — demo &amp; docs</span>
+  </div>
+  <button type="button" class="demo-header__dark" (click)="toggleDark()">
+    {{ dark() ? '☀ Light' : '☾ Dark' }}
+  </button>
+</header>
+
+<div class="demo-layout">
+  <aside class="demo-sidebar">
+    @for (group of nav; track group.title) {
+      <nav class="demo-navgroup">
+        <h3 class="demo-navgroup__title">{{ group.title }}</h3>
+        <ul class="demo-navgroup__list">
+          @for (item of group.items; track item.path) {
+            <li>
+              <a
+                class="demo-navlink"
+                [routerLink]="['/', item.path]"
+                routerLinkActive="demo-navlink--active"
+                [routerLinkActiveOptions]="{ exact: item.path === '' }"
+              >
+                {{ item.label }}
+              </a>
+            </li>
+          }
+        </ul>
+      </nav>
+    }
+  </aside>
+
+  <main class="demo-main">
+    <router-outlet />
+  </main>
+</div>

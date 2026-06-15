@@ -1,0 +1,176 @@
+/*!
+ * ngx-datatables-net — Material styling adapter
+ *
+ * Self-contained CSS giving DataTables' default markup an Angular Material / Material Design 3 look
+ * (elevated card surface, Roboto typography, primary-colour accents, comfortable row height, subtle
+ * row dividers). Scoped under `.ngxdt-material`, added to the container by the `withMaterial()`
+ * adapter. DataTables has NO official Material styling — this is authored by us.
+ *
+ * Include in your app (angular.json styles, or @import):
+ *   "node_modules/ngx-datatables-net/material/styles/ngx-datatables-net.material.css"
+ *
+ * Supports dark mode via a `.dark` ancestor or `.ngxdt-dark` on the container.
+ */
+
+.ngxdt-material {
+  --ngxdt-md-surface: #ffffff;
+  --ngxdt-md-on-surface: #1c1b1f;
+  --ngxdt-md-on-surface-variant: #49454f;
+  --ngxdt-md-outline: #cac4d0;
+  --ngxdt-md-divider: #e7e0ec;
+  --ngxdt-md-primary: #6750a4;
+  --ngxdt-md-on-primary: #ffffff;
+  --ngxdt-md-primary-container: #eaddff;
+  --ngxdt-md-hover: rgba(103, 80, 164, 0.08);
+  --ngxdt-md-shadow: rgba(0, 0, 0, 0.2);
+
+  color: var(--ngxdt-md-on-surface);
+  font-family: Roboto, "Helvetica Neue", system-ui, -apple-system, sans-serif;
+  font-size: 0.875rem;
+}
+
+.dark .ngxdt-material,
+.ngxdt-material.ngxdt-dark {
+  --ngxdt-md-surface: #1c1b1f;
+  --ngxdt-md-on-surface: #e6e1e5;
+  --ngxdt-md-on-surface-variant: #cac4d0;
+  --ngxdt-md-outline: #49454f;
+  --ngxdt-md-divider: #2b2930;
+  --ngxdt-md-primary: #d0bcff;
+  --ngxdt-md-on-primary: #381e72;
+  --ngxdt-md-primary-container: #4f378b;
+  --ngxdt-md-hover: rgba(208, 188, 255, 0.12);
+  --ngxdt-md-shadow: rgba(0, 0, 0, 0.5);
+}
+
+/* Layout rows */
+.ngxdt-material .dt-layout-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 0.75rem 0;
+}
+.ngxdt-material .dt-layout-start { margin-right: auto; }
+.ngxdt-material .dt-layout-end { margin-left: auto; }
+
+.ngxdt-material .dt-length,
+.ngxdt-material .dt-search {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--ngxdt-md-on-surface-variant);
+}
+
+/* Filled, Material-style text fields (bottom-border emphasis) */
+.ngxdt-material .dt-input,
+.ngxdt-material .dt-search input,
+.ngxdt-material .dt-length select {
+  background: var(--ngxdt-md-surface);
+  color: var(--ngxdt-md-on-surface);
+  border: none;
+  border-bottom: 1px solid var(--ngxdt-md-outline);
+  border-radius: 4px 4px 0 0;
+  padding: 0.45rem 0.6rem;
+  font-size: 0.875rem;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.ngxdt-material .dt-input:focus,
+.ngxdt-material .dt-search input:focus,
+.ngxdt-material .dt-length select:focus {
+  outline: none;
+  border-bottom: 2px solid var(--ngxdt-md-primary);
+  box-shadow: 0 1px 0 0 var(--ngxdt-md-primary);
+}
+
+/* Elevated surface (Material data table card) */
+.ngxdt-material table.dataTable {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--ngxdt-md-surface);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow:
+    0 1px 2px var(--ngxdt-md-shadow),
+    0 1px 3px 1px rgba(0, 0, 0, 0.1);
+}
+.ngxdt-material table.dataTable thead th,
+.ngxdt-material table.dataTable thead td {
+  background: var(--ngxdt-md-surface);
+  color: var(--ngxdt-md-on-surface-variant);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-align: left;
+  padding: 0.9rem 1rem;
+  border-bottom: 1px solid var(--ngxdt-md-divider);
+  white-space: nowrap;
+}
+.ngxdt-material table.dataTable tbody td {
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid var(--ngxdt-md-divider);
+  height: 52px;
+}
+.ngxdt-material table.dataTable tbody tr:last-child td {
+  border-bottom: none;
+}
+.ngxdt-material table.dataTable tbody tr {
+  transition: background 0.15s ease;
+}
+.ngxdt-material table.dataTable tbody tr:hover td {
+  background: var(--ngxdt-md-hover);
+}
+
+/* Sort indicators */
+.ngxdt-material table.dataTable thead .dt-orderable-asc,
+.ngxdt-material table.dataTable thead .dt-orderable-desc {
+  cursor: pointer;
+}
+.ngxdt-material table.dataTable thead .dt-ordering-asc,
+.ngxdt-material table.dataTable thead .dt-ordering-desc {
+  color: var(--ngxdt-md-primary);
+}
+
+/* Info text */
+.ngxdt-material .dt-info {
+  color: var(--ngxdt-md-on-surface-variant);
+  font-size: 0.8125rem;
+}
+
+/* Pagination — pill buttons with primary "current" */
+.ngxdt-material .dt-paging {
+  display: inline-flex;
+  gap: 0.25rem;
+}
+.ngxdt-material .dt-paging .dt-paging-button {
+  appearance: none;
+  background: transparent;
+  color: var(--ngxdt-md-on-surface);
+  border: none;
+  border-radius: 999px;
+  min-width: 36px;
+  height: 36px;
+  padding: 0 0.6rem;
+  font-size: 0.8125rem;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.ngxdt-material .dt-paging .dt-paging-button:hover:not(.disabled):not(.current) {
+  background: var(--ngxdt-md-hover);
+}
+.ngxdt-material .dt-paging .dt-paging-button.current {
+  background: var(--ngxdt-md-primary);
+  color: var(--ngxdt-md-on-primary);
+}
+.ngxdt-material .dt-paging .dt-paging-button.disabled {
+  opacity: 0.38;
+  cursor: not-allowed;
+}
+
+/* Processing indicator */
+.ngxdt-material .dt-processing {
+  background: var(--ngxdt-md-surface);
+  color: var(--ngxdt-md-on-surface);
+  border-radius: 12px;
+  box-shadow: 0 6px 20px -6px var(--ngxdt-md-shadow);
+}

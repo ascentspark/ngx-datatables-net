@@ -1,0 +1,90 @@
+/* Global demo styles. DataTables' own CSS is added via angular.json (dt adapter + tailwind/material). */
+
+:root {
+  --demo-bg: #f7f8fa;
+  --demo-surface: #ffffff;
+  --demo-border: #e3e6ea;
+  --demo-text: #1f2933;
+  --demo-muted: #66727f;
+  --demo-accent: #2f6fed;
+}
+
+:root.dark {
+  --demo-bg: #0b1220;
+  --demo-surface: #111a2b;
+  --demo-border: #243044;
+  --demo-text: #e2e8f0;
+  --demo-muted: #93a1b5;
+  --demo-accent: #6ea0ff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--demo-bg);
+  color: var(--demo-text);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+/* Shared example helpers */
+.demo-h2 {
+  margin: 0 0 0.25rem;
+  font-size: 1.35rem;
+}
+
+.demo-sub {
+  margin: 0 0 1rem;
+  color: var(--demo-muted);
+}
+
+code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  background: rgba(127, 127, 127, 0.14);
+  padding: 0.05rem 0.3rem;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+
+.demo-note {
+  margin-top: 1rem;
+  padding: 0.6rem 0.85rem;
+  background: rgba(47, 111, 237, 0.08);
+  border: 1px solid rgba(47, 111, 237, 0.25);
+  border-radius: 6px;
+}
+
+.demo-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  margin-bottom: 0.85rem;
+}
+
+.demo-btn {
+  background: var(--demo-accent);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.demo-btn--ghost {
+  background: transparent;
+  color: var(--demo-text);
+  border: 1px solid var(--demo-border);
+}
+
+/* DataTables default theme tweak inside the demo surface */
+table.dataTable {
+  background: var(--demo-surface);
+}

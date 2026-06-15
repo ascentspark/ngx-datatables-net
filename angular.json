@@ -1,0 +1,136 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "cli": {
+    "packageManager": "npm"
+  },
+  "newProjectRoot": "projects",
+  "projects": {
+    "ngx-datatables-net": {
+      "projectType": "library",
+      "root": "projects/ngx-datatables-net",
+      "sourceRoot": "projects/ngx-datatables-net/src",
+      "prefix": "dt",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:ng-packagr",
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/ngx-datatables-net/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/ngx-datatables-net/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "tsConfig": "projects/ngx-datatables-net/tsconfig.spec.json"
+          }
+        }
+      }
+    },
+    "demo": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
+      "root": "projects/demo",
+      "sourceRoot": "projects/demo/src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:application",
+          "options": {
+            "browser": "projects/demo/src/main.ts",
+            "tsConfig": "projects/demo/tsconfig.app.json",
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              {
+                "glob": "**/*",
+                "input": "projects/demo/public"
+              }
+            ],
+            "styles": [
+              "node_modules/datatables.net-dt/css/dataTables.dataTables.css",
+              "node_modules/datatables.net-select-dt/css/select.dataTables.css",
+              "projects/demo/src/styles.scss",
+              "dist/ngx-datatables-net/tailwind/styles/ngx-datatables-net.tailwind.css",
+              "dist/ngx-datatables-net/material/styles/ngx-datatables-net.material.css",
+              {
+                "input": "node_modules/bootstrap/dist/css/bootstrap.min.css",
+                "inject": false,
+                "bundleName": "bootstrap"
+              },
+              {
+                "input": "node_modules/datatables.net-bs5/css/dataTables.bootstrap5.css",
+                "inject": false,
+                "bundleName": "datatables-bs5"
+              },
+              "node_modules/datatables.net-buttons-dt/css/buttons.dataTables.css",
+              "node_modules/datatables.net-responsive-dt/css/responsive.dataTables.css",
+              "node_modules/datatables.net-fixedheader-dt/css/fixedHeader.dataTables.css",
+              "node_modules/datatables.net-fixedcolumns-dt/css/fixedColumns.dataTables.css",
+              "node_modules/datatables.net-scroller-dt/css/scroller.dataTables.css",
+              "node_modules/datatables.net-rowgroup-dt/css/rowGroup.dataTables.css",
+              "node_modules/datatables.net-rowreorder-dt/css/rowReorder.dataTables.css",
+              "node_modules/datatables.net-colreorder-dt/css/colReorder.dataTables.css",
+              "node_modules/datatables.net-searchpanes-dt/css/searchPanes.dataTables.css",
+              "node_modules/datatables.net-searchbuilder-dt/css/searchBuilder.dataTables.css",
+              "node_modules/datatables.net-keytable-dt/css/keyTable.dataTables.css",
+              "node_modules/datatables.net-autofill-dt/css/autoFill.dataTables.css",
+              "node_modules/datatables.net-staterestore-dt/css/stateRestore.dataTables.css",
+              "node_modules/datatables.net-datetime/css/dataTables.dateTime.scss",
+              "node_modules/datatables.net-columncontrol-dt/css/columnControl.dataTables.css"
+            ],
+            "allowedCommonJsDependencies": [
+              "jquery"
+            ]
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kB",
+                  "maximumError": "1MB"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "4kB",
+                  "maximumError": "8kB"
+                }
+              ],
+              "outputHashing": "all"
+            },
+            "development": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular/build:dev-server",
+          "configurations": {
+            "production": {
+              "buildTarget": "demo:build:production"
+            },
+            "development": {
+              "buildTarget": "demo:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "test": {
+          "builder": "@angular/build:unit-test"
+        }
+      }
+    }
+  }
+}

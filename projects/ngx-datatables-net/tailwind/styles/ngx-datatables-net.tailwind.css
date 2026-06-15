@@ -1,0 +1,181 @@
+/*!
+ * ngx-datatables-net — Tailwind styling adapter
+ *
+ * Self-contained CSS (no Tailwind build/safelist required) that gives DataTables' default markup a
+ * Tailwind-flavoured look (slate neutrals + indigo accent, rounded corners, subtle borders). Scoped
+ * under `.ngxdt-tailwind`, which the `withTailwind()` adapter adds to the DataTables container.
+ *
+ * Include in your app (angular.json styles, or @import):
+ *   "node_modules/ngx-datatables-net/tailwind/styles/ngx-datatables-net.tailwind.css"
+ *
+ * Designed to sit comfortably inside Tailwind projects; supports dark mode via `.dark` ancestor.
+ */
+
+.ngxdt-tailwind {
+  --ngxdt-tw-bg: #ffffff;
+  --ngxdt-tw-fg: #0f172a;
+  --ngxdt-tw-muted: #64748b;
+  --ngxdt-tw-border: #e2e8f0;
+  --ngxdt-tw-header-bg: #f8fafc;
+  --ngxdt-tw-row-hover: #f1f5f9;
+  --ngxdt-tw-stripe: #f8fafc;
+  --ngxdt-tw-accent: #4f46e5;
+  --ngxdt-tw-accent-fg: #ffffff;
+  --ngxdt-tw-ring: #c7d2fe;
+
+  color: var(--ngxdt-tw-fg);
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 0.875rem;
+}
+
+.dark .ngxdt-tailwind,
+.ngxdt-tailwind.ngxdt-dark {
+  --ngxdt-tw-bg: #0f172a;
+  --ngxdt-tw-fg: #e2e8f0;
+  --ngxdt-tw-muted: #94a3b8;
+  --ngxdt-tw-border: #334155;
+  --ngxdt-tw-header-bg: #1e293b;
+  --ngxdt-tw-row-hover: #1e293b;
+  --ngxdt-tw-stripe: #172033;
+  --ngxdt-tw-accent: #818cf8;
+  --ngxdt-tw-accent-fg: #0f172a;
+  --ngxdt-tw-ring: #3730a3;
+}
+
+/* Layout rows (length / search / info / paging) */
+.ngxdt-tailwind .dt-layout-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin: 0.5rem 0;
+}
+.ngxdt-tailwind .dt-layout-start { margin-right: auto; }
+.ngxdt-tailwind .dt-layout-end { margin-left: auto; }
+
+/* Length + search controls */
+.ngxdt-tailwind .dt-length,
+.ngxdt-tailwind .dt-search {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--ngxdt-tw-muted);
+}
+.ngxdt-tailwind .dt-input,
+.ngxdt-tailwind select.dt-input,
+.ngxdt-tailwind .dt-search input,
+.ngxdt-tailwind .dt-length select {
+  appearance: none;
+  background: var(--ngxdt-tw-bg);
+  color: var(--ngxdt-tw-fg);
+  border: 1px solid var(--ngxdt-tw-border);
+  border-radius: 0.5rem;
+  padding: 0.375rem 0.625rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.ngxdt-tailwind .dt-input:focus,
+.ngxdt-tailwind .dt-search input:focus,
+.ngxdt-tailwind .dt-length select:focus {
+  outline: none;
+  border-color: var(--ngxdt-tw-accent);
+  box-shadow: 0 0 0 3px var(--ngxdt-tw-ring);
+}
+
+/* The table itself */
+.ngxdt-tailwind table.dataTable {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: var(--ngxdt-tw-bg);
+  border: 1px solid var(--ngxdt-tw-border);
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+.ngxdt-tailwind table.dataTable thead th,
+.ngxdt-tailwind table.dataTable thead td {
+  background: var(--ngxdt-tw-header-bg);
+  color: var(--ngxdt-tw-fg);
+  font-weight: 600;
+  text-align: left;
+  padding: 0.625rem 0.875rem;
+  border-bottom: 1px solid var(--ngxdt-tw-border);
+  white-space: nowrap;
+}
+.ngxdt-tailwind table.dataTable tbody td {
+  padding: 0.625rem 0.875rem;
+  border-bottom: 1px solid var(--ngxdt-tw-border);
+}
+.ngxdt-tailwind table.dataTable tbody tr:last-child td {
+  border-bottom: none;
+}
+.ngxdt-tailwind table.dataTable.stripe tbody tr:nth-child(odd) td,
+.ngxdt-tailwind table.dataTable tbody tr.odd td {
+  background: var(--ngxdt-tw-stripe);
+}
+.ngxdt-tailwind table.dataTable tbody tr:hover td {
+  background: var(--ngxdt-tw-row-hover);
+}
+
+/* Sort indicators (use DataTables' built-in orderable classes) */
+.ngxdt-tailwind table.dataTable thead .dt-orderable-asc,
+.ngxdt-tailwind table.dataTable thead .dt-orderable-desc {
+  cursor: pointer;
+}
+.ngxdt-tailwind table.dataTable thead .dt-column-order::before,
+.ngxdt-tailwind table.dataTable thead .dt-column-order::after {
+  opacity: 0.35;
+}
+.ngxdt-tailwind table.dataTable thead .dt-ordering-asc .dt-column-order::before,
+.ngxdt-tailwind table.dataTable thead .dt-ordering-desc .dt-column-order::after {
+  opacity: 1;
+  color: var(--ngxdt-tw-accent);
+}
+
+/* Info text */
+.ngxdt-tailwind .dt-info {
+  color: var(--ngxdt-tw-muted);
+  font-size: 0.8125rem;
+}
+
+/* Pagination */
+.ngxdt-tailwind .dt-paging {
+  display: inline-flex;
+  gap: 0.25rem;
+}
+.ngxdt-tailwind .dt-paging .dt-paging-button {
+  appearance: none;
+  background: var(--ngxdt-tw-bg);
+  color: var(--ngxdt-tw-fg);
+  border: 1px solid var(--ngxdt-tw-border);
+  border-radius: 0.5rem;
+  padding: 0.375rem 0.7rem;
+  margin: 0;
+  font-size: 0.8125rem;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+.ngxdt-tailwind .dt-paging .dt-paging-button:hover:not(.disabled):not(.current) {
+  background: var(--ngxdt-tw-row-hover);
+  border-color: var(--ngxdt-tw-accent);
+}
+.ngxdt-tailwind .dt-paging .dt-paging-button.current {
+  background: var(--ngxdt-tw-accent);
+  border-color: var(--ngxdt-tw-accent);
+  color: var(--ngxdt-tw-accent-fg);
+}
+.ngxdt-tailwind .dt-paging .dt-paging-button.disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Processing indicator */
+.ngxdt-tailwind .dt-processing {
+  background: var(--ngxdt-tw-bg);
+  border: 1px solid var(--ngxdt-tw-border);
+  border-radius: 0.5rem;
+  color: var(--ngxdt-tw-fg);
+  box-shadow: 0 10px 25px -10px rgba(15, 23, 42, 0.3);
+}
