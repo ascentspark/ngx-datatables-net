@@ -24,7 +24,7 @@ npm install ngx-datatables-net datatables.net datatables.net-dt
 `datatables.net` is a peer dependency. Pick a styling package (`datatables.net-dt` for the default
 theme, `datatables.net-bs5` for Bootstrap 5) and add its stylesheet in `angular.json`:
 
-```jsonc
+```
 "styles": [
   "node_modules/datatables.net-dt/css/dataTables.dataTables.css",
   "src/styles.scss"
@@ -127,7 +127,7 @@ Each adapter is a secondary entry point. Import one and pass it to `provideDataT
 
 For Tailwind and Material, also include the shipped stylesheet (the directive adds the scope class for you):
 
-```jsonc
+```
 // angular.json styles
 "node_modules/ngx-datatables-net/tailwind/styles/ngx-datatables-net.tailwind.css"
 // or
