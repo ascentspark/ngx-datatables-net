@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+    branches: [main, '21.x', '20.x']
+  pull_request:
+  workflow_dispatch:
+
+# Build and unit-test the library against every supported Angular major. Each release line pins its
+# own Angular version in package.json, so the matrix checks out each branch and runs against the
+# Angular it targets.
+jobs:
+  build-test:
+    name: Angular ${{ matrix.angular }} (${{ matrix.ref }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - ref: main
+            angular: '22'
+          - ref: '21.x'
+            angular: '21'
+          - ref: '20.x'
+            angular: '20'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ matrix.ref }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx ng build ngx-datatables-net
+      - run: npx ng test ngx-datatables-net --watch=false
