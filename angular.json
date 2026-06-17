@@ -27,7 +27,9 @@
         "test": {
           "builder": "@angular/build:unit-test",
           "options": {
-            "tsConfig": "projects/ngx-datatables-net/tsconfig.spec.json"
+            "tsConfig": "projects/ngx-datatables-net/tsconfig.spec.json",
+            "buildTarget": "ngx-datatables-net:build",
+            "runner": "vitest"
           }
         }
       }
