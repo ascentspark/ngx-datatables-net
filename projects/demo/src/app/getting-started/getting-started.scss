@@ -116,6 +116,42 @@
   white-space: nowrap;
 }
 
+/* Version switcher */
+.gs-vers {
+  display: inline-flex;
+  gap: 0;
+  margin: 0 0 0.75rem;
+  border: 1px solid var(--demo-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.gs-vers__btn {
+  appearance: none;
+  border: 0;
+  border-right: 1px solid var(--demo-border);
+  background: transparent;
+  color: var(--demo-muted);
+  font-family: var(--font-primary);
+  font-size: 0.9rem;
+  padding: 0.4rem 0.9rem;
+  cursor: pointer;
+}
+
+.gs-vers__btn:last-child {
+  border-right: 0;
+}
+
+.gs-vers__btn:hover:not(.gs-vers__btn--active) {
+  background: var(--demo-tint);
+  color: var(--demo-text);
+}
+
+.gs-vers__btn--active {
+  background: var(--asc-spark-orange);
+  color: var(--asc-pure-white);
+}
+
 /* Dark code block, JetBrains Mono. Reset the global inline-code styling inside it. */
 .gs-code {
   margin: 0;

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 /**
@@ -46,9 +46,25 @@ import { RouterLink } from '@angular/router';
               <code>ngx-datatables-net</code> is the wrapper. <code>datatables.net</code> is the
               underlying library, and <code>datatables.net-dt</code> is its default theme.
             </p>
+            <p>
+              Pick the line that matches your Angular version. The package API is the same across all
+              three, so everything below works unchanged.
+            </p>
+            <div class="gs-vers" role="group" aria-label="Angular version">
+              @for (v of ngVersions; track v) {
+                <button
+                  type="button"
+                  class="gs-vers__btn"
+                  [class.gs-vers__btn--active]="ngVersion() === v"
+                  (click)="ngVersion.set(v)"
+                >
+                  Angular {{ v }}
+                </button>
+              }
+            </div>
             <pre
               class="gs-code"
-            ><code>npm install ngx-datatables-net datatables.net datatables.net-dt</code></pre>
+            ><code>npm install ngx-datatables-net&#64;{{ ngVersion() }} datatables.net datatables.net-dt</code></pre>
           </div>
         </li>
 
@@ -165,6 +181,9 @@ export class PeopleComponent {{ '{' }}
   styleUrl: './getting-started.scss',
 })
 export class GettingStarted {
+  protected readonly ngVersions = ['22', '21', '20'] as const;
+  protected readonly ngVersion = signal<'22' | '21' | '20'>('22');
+
   protected readonly faqs = [
     {
       q: 'Does ngx-datatables-net require jQuery?',
