@@ -15,15 +15,20 @@ yarn-error.log
 /coverage
 
 # IDE / editor
-/.idea
-/.vscode/*
-!/.vscode/extensions.json
+/.idea/
+/.vscode/
+.antigravity/
+.windsurf/
+.zed/
+.fleet/
+*.code-workspace
 .project
 .classpath
 .c9/
 *.launch
 .settings/
 *.sublime-workspace
+*.sublime-project
 .history/
 
 # System
