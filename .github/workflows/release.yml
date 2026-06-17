@@ -1,0 +1,38 @@
+name: Release
+
+# Publishes the library to npm with provenance via OIDC trusted publishing — no npm token needed.
+# Run it from the branch of the line you are releasing (main = 22 line, 21.x, 20.x) after bumping
+# the version in projects/ngx-datatables-net/package.json, and pick the matching dist-tag.
+on:
+  workflow_dispatch:
+    inputs:
+      dist-tag:
+        description: 'npm dist-tag (latest for the newest major, otherwise ng21 / ng20)'
+        required: true
+        default: latest
+        type: choice
+        options:
+          - latest
+          - ng21
+          - ng20
+
+permissions:
+  contents: read
+  id-token: write # required for npm provenance / trusted publishing
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+          cache: npm
+      # Trusted publishing (OIDC) needs a recent npm.
+      - run: npm install -g npm@latest
+      - run: npm ci
+      - run: npx ng build ngx-datatables-net
+      - run: npm publish --provenance --access public --tag ${{ inputs.dist-tag }}
+        working-directory: dist/ngx-datatables-net
