@@ -58,6 +58,7 @@
             "styles": [
               "node_modules/datatables.net-dt/css/dataTables.dataTables.css",
               "node_modules/datatables.net-select-dt/css/select.dataTables.css",
+              "projects/demo/src/ascentspark.css",
               "projects/demo/src/styles.scss",
               "dist/ngx-datatables-net/tailwind/styles/ngx-datatables-net.tailwind.css",
               "dist/ngx-datatables-net/material/styles/ngx-datatables-net.material.css",
@@ -89,7 +90,9 @@
             ],
             "allowedCommonJsDependencies": [
               "jquery"
-            ]
+            ],
+            "server": "projects/demo/src/main.server.ts",
+            "outputMode": "static"
           },
           "configurations": {
             "production": {

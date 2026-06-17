@@ -4,7 +4,7 @@ import { ExampleCard, type ExampleSource } from '../../shared/example-card';
 
 /**
  * Client-side Ajax: DataTables fetches the full dataset once from a URL, then does paging,
- * sorting and searching in the browser. No jQuery at the call site — just the `ajax` option.
+ * sorting and searching in the browser. No jQuery at the call site, just the `ajax` option.
  */
 @Component({
   selector: 'demo-data-ajax',
@@ -53,19 +53,35 @@ export class DataAjax {
       label: 'component.ts',
       lang: 'ts',
       code: `options: Config = {
-  ajax: 'data/employees.json',        // string | object | function
+  ajax: 'data/employees.json',        // string URL, an object, or a function
   columns: [
     { data: 'id', title: 'ID' },
     { data: 'name', title: 'Name' },
-    // …
+    { data: 'position', title: 'Position' },
+    { data: 'office', title: 'Office' },
+    { data: 'age', title: 'Age' },
+    { data: 'startDate', title: 'Start date' },
+    { data: 'salary', title: 'Salary' },
+    { data: 'status', title: 'Status' },
   ],
 };`,
     },
     {
       label: 'template.html',
       lang: 'html',
-      code: `<table dtTable [dtOptions]="options">
-  <thead><tr><th>ID</th>…</tr></thead>
+      code: `<table dtTable class="display" style="width:100%" [dtOptions]="options">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Position</th>
+      <th>Office</th>
+      <th>Age</th>
+      <th>Start date</th>
+      <th>Salary</th>
+      <th>Status</th>
+    </tr>
+  </thead>
 </table>`,
     },
   ];

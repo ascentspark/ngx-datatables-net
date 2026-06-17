@@ -24,7 +24,7 @@ const fonts = pdfFonts as unknown as { pdfMake?: { vfs?: unknown }; vfs?: unknow
 
 /**
  * Buttons extension: export to Copy / CSV / Excel / PDF / Print, plus a column-visibility button.
- * The directive passes the `layout` + `buttons` options straight through — no per-extension code.
+ * The directive passes the `layout` + `buttons` options straight through, no per-extension code.
  */
 @Component({
   selector: 'demo-ext-buttons',
@@ -33,8 +33,9 @@ const fonts = pdfFonts as unknown as { pdfMake?: { vfs?: unknown }; vfs?: unknow
   template: `
     <demo-example
       title="Buttons (export)"
-      description="Export to Copy, CSV, Excel, PDF and Print via the Buttons extension, plus a column-visibility toggle. JSZip powers Excel and pdfMake powers PDF — wired once at module load."
+      description="Export to Copy, CSV, Excel, PDF and Print via the Buttons extension, plus a column-visibility toggle. JSZip powers Excel and pdfMake powers PDF, wired once at module load."
       [sources]="sources"
+      docsUrl="https://datatables.net/extensions/buttons/"
     >
       <table
         dtTable

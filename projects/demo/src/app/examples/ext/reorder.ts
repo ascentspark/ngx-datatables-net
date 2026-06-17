@@ -19,6 +19,7 @@ import 'datatables.net-rowreorder';
       title="RowGroup, ColReorder & RowReorder"
       description="Rows grouped by Office with group headers (RowGroup). Drag a column header to reorder columns (ColReorder). Drag the ⠿ handle to reorder rows (RowReorder)."
       [sources]="sources"
+      docsUrl="https://datatables.net/extensions/rowgroup/"
     >
       <table
         dtTable

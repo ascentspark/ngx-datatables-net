@@ -21,6 +21,7 @@ import 'datatables.net-searchbuilder';
       title="SearchPanes & SearchBuilder"
       description="Faceted filtering: SearchPanes shows clickable value panes (with counts) for Office and Status; SearchBuilder lets you compose complex conditions. Both are positioned through the layout option."
       [sources]="sources"
+      docsUrl="https://datatables.net/extensions/searchpanes/"
     >
       <table
         dtTable

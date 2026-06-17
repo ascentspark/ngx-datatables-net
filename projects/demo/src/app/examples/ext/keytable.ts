@@ -7,7 +7,7 @@ import 'datatables.net-autofill';
 
 /**
  * KeyTable adds Excel-like keyboard navigation (arrow keys move a focused cell). AutoFill adds a
- * drag handle to fill a selection across cells. (DateTime — a date picker — pairs with the Editor
+ * drag handle to fill a selection across cells. (DateTime, a date picker, pairs with the Editor
  * extension for inline date editing; see the note.)
  */
 @Component({
@@ -19,6 +19,7 @@ import 'datatables.net-autofill';
       title="KeyTable, AutoFill & DateTime"
       description="Click a cell, then use the arrow keys to move the focus cell (KeyTable). Drag the AutoFill handle from a selected cell to fill across cells. DateTime provides a date picker for inline editing."
       [sources]="sources"
+      docsUrl="https://datatables.net/extensions/keytable/"
     >
       <table
         dtTable
@@ -43,7 +44,7 @@ import 'datatables.net-autofill';
       </table>
       <p class="demo-note">
         DateTime (<code>datatables.net-datetime</code>) is a standalone date/time picker most useful
-        with the Editor extension for inline date editing — see the Editor (compatibility) page.
+        with the Editor extension for inline date editing, see the Editor (compatibility) page.
       </p>
     </demo-example>
   `,

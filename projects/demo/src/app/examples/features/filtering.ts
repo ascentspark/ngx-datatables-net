@@ -8,7 +8,7 @@ import { ExampleCard, type ExampleSource } from '../../shared/example-card';
  * search inputs wired through the Api.
  *
  * NOTE: the per-column inputs live in a toolbar ABOVE the table, not in `<tfoot>`. DataTables
- * wraps/clones header & footer cell content, which detaches Angular event listeners — so interactive
+ * wraps/clones header & footer cell content, which detaches Angular event listeners, so interactive
  * Angular controls must sit outside the table DataTables manages, calling the Api imperatively.
  */
 @Component({
@@ -18,7 +18,7 @@ import { ExampleCard, type ExampleSource } from '../../shared/example-card';
   template: `
     <demo-example
       title="Filtering"
-      description="Built-in global search, a debounced signal-driven search box, and per-column search inputs wired to api.column(i).search(). Per-column inputs sit above the table — DataTables rewrites footer/header DOM, so interactive controls belong outside it."
+      description="Built-in global search, a debounced signal-driven search box, and per-column search inputs wired to api.column(i).search(). Per-column inputs sit above the table, DataTables rewrites footer/header DOM, so interactive controls belong outside it."
       [sources]="sources"
     >
       <div class="demo-toolbar">
@@ -26,7 +26,7 @@ import { ExampleCard, type ExampleSource } from '../../shared/example-card';
           >Debounced global:
           <input
             type="search"
-            placeholder="type to filter…"
+            placeholder="Type to filter"
             data-testid="debounced-search"
             (input)="onDebounced($any($event.target).value)"
           />
@@ -106,7 +106,7 @@ onDebounced(value: string) {
   this.timer = setTimeout(() => this.api?.search(value).draw(), 250);
 }
 
-// Per-column search — inputs live OUTSIDE the table (DataTables
+// Per-column search, inputs live OUTSIDE the table (DataTables
 // rewrites footer/header DOM and would detach Angular listeners).
 onColumnSearch(i: number, value: string) {
   this.api?.column(i).search(value).draw();

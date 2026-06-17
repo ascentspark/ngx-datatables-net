@@ -1,7 +1,7 @@
 /*
- * ngx-datatables-net/material — Material Design styling adapter.
+ * ngx-datatables-net/material, Material Design styling adapter.
  *
- * DataTables has NO official Material styling package — this adapter is authored by us. It uses the
+ * DataTables has NO official Material styling package, this adapter is authored by us. It uses the
  * core (unstyled-markup) constructor and ships a self-contained stylesheet scoped under
  * `.ngxdt-material` (added to the container automatically via the `DT_STYLE_SCOPE` token).
  *

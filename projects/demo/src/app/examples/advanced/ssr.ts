@@ -5,7 +5,7 @@ import { ExampleCard, type ExampleSource } from '../../shared/example-card';
 
 /**
  * SSR & hydration safety. The directive initialises DataTables inside `afterNextRender`, which runs
- * ONLY in the browser — so server-side rendering emits the plain `<table>` markup (great for SEO and
+ * ONLY in the browser, so server-side rendering emits the plain `<table>` markup (great for SEO and
  * fast first paint) and the table is enhanced on the client during hydration. No `document`/layout
  * access ever happens on the server, so SSR never crashes.
  */
@@ -16,7 +16,7 @@ import { ExampleCard, type ExampleSource } from '../../shared/example-card';
   template: `
     <demo-example
       title="SSR & hydration"
-      description="The directive initialises DataTables in afterNextRender (browser-only). On the server the plain table HTML is rendered; on the client it's enhanced during hydration. No isPlatformBrowser guard needed — afterNextRender never runs on the server."
+      description="The directive initialises DataTables in afterNextRender (browser-only). On the server the plain table HTML is rendered; on the client it's enhanced during hydration. No isPlatformBrowser guard needed, afterNextRender never runs on the server."
       [sources]="sources"
     >
       <p class="demo-note">
@@ -52,7 +52,7 @@ export class AdvancedSsr {
       code: `// Inside the directive (simplified):
 constructor() {
   afterNextRender(() => {
-    // browser-only — never runs during SSR
+    // browser-only, never runs during SSR
     this.table = new DataTable(this.host.nativeElement, config);
   });
 }

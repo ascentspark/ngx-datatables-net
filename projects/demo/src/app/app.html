@@ -1,11 +1,22 @@
 <header class="demo-header">
   <div class="demo-header__brand">
-    <a routerLink="/" class="demo-header__logo">ngx-datatables-net</a>
-    <span class="demo-header__tag">Angular DataTables — demo &amp; docs</span>
+    <a routerLink="/" class="demo-header__name">ngx-datatables-net</a>
+    <span class="demo-header__tagline">
+      Modern Angular wrapper for
+      <a href="https://datatables.net" target="_blank" rel="noopener">DataTables.net</a>
+    </span>
   </div>
-  <button type="button" class="demo-header__dark" (click)="toggleDark()">
-    {{ dark() ? '☀ Light' : '☾ Dark' }}
-  </button>
+
+  <div class="demo-header__meta">
+    <a href="https://ascentspark.com" target="_blank" rel="noopener" class="demo-header__maintainer">
+      <span>Angular wrapper maintained by</span>
+      <asc-glyph class="demo-header__glyph" />
+      <span class="demo-header__maintainer-name">ascentspark</span>
+    </a>
+    <button type="button" class="demo-header__dark" (click)="toggleDark()">
+      {{ dark() ? 'Light' : 'Dark' }}
+    </button>
+  </div>
 </header>
 
 <div class="demo-layout">
@@ -18,7 +29,7 @@
             <li>
               <a
                 class="demo-navlink"
-                [routerLink]="['/', item.path]"
+                [routerLink]="'/' + item.path"
                 routerLinkActive="demo-navlink--active"
                 [routerLinkActiveOptions]="{ exact: item.path === '' }"
               >

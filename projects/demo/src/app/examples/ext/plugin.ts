@@ -13,7 +13,7 @@ import DataTable from 'datatables.net';
 
 /**
  * Community / custom plugin example. DataTables plugins are just code that registers against
- * `DataTable.ext.*` — exactly how packages from `datatables.net-plugins` work. Here we register a
+ * `DataTable.ext.*`, exactly how packages from `datatables.net-plugins` work. Here we register a
  * custom range-search plugin (filter by minimum age) and drive it from a signal, proving the
  * directive's pass-through model accommodates any plugin with zero library changes.
  */
@@ -24,8 +24,9 @@ import DataTable from 'datatables.net';
   template: `
     <demo-example
       title="Community / custom plugin"
-      description="A custom range-search plugin registered via DataTable.ext.search — the same mechanism every datatables.net-plugins package uses. Drag the slider to filter by minimum age; the plugin re-filters on draw()."
+      description="A custom range-search plugin registered via DataTable.ext.search, the same mechanism every datatables.net-plugins package uses. Drag the slider to filter by minimum age; the plugin re-filters on draw()."
       [sources]="sources"
+      docsUrl="https://datatables.net/plug-ins/"
     >
       <div class="demo-toolbar">
         <label
@@ -101,13 +102,16 @@ export class ExtPlugin {
       lang: 'ts',
       code: `import DataTable from 'datatables.net';
 
-// A custom range-search plugin — the same API datatables.net-plugins use.
+// A custom range-search plugin, the same API datatables.net-plugins use.
 const searchFn = (settings, rowData) =>
   Number(rowData[4]) >= this.minAge();
 
 DataTable.ext.search.push(searchFn);     // register
 this.api.draw();                          // re-filter on change
-// …remove from DataTable.ext.search on destroy.`,
+
+// On destroy, remove it again so it does not affect other tables:
+const i = DataTable.ext.search.indexOf(searchFn);
+if (i >= 0) DataTable.ext.search.splice(i, 1);`,
     },
   ];
 }

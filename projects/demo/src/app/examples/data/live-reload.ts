@@ -4,7 +4,7 @@ import { ExampleCard, type ExampleSource } from '../../shared/example-card';
 import { EMPLOYEES, EMPLOYEE_COLUMNS, makeEmployees, type Employee } from '../../data/employees';
 
 /**
- * Signal-driven reload — no manual `dtTrigger.next()` (the old library's #1 pain point).
+ * Signal-driven reload, no manual `dtTrigger.next()` (the old library's #1 pain point).
  * Assigning a NEW array reference to the `dtData` input reconciles via the cheap
  * `clear → rows.add → draw` path, keeping the current page/sort.
  */
@@ -15,7 +15,7 @@ import { EMPLOYEES, EMPLOYEE_COLUMNS, makeEmployees, type Employee } from '../..
   template: `
     <demo-example
       title="Signal-driven reload"
-      description="Reassign the dtData signal to reload — the table reconciles automatically with no manual trigger. This is the modern replacement for the old dtTrigger Subject dance."
+      description="Reassign the dtData signal to reload, the table reconciles automatically with no manual trigger. This is the modern replacement for the old dtTrigger Subject dance."
       [sources]="sources"
     >
       <div class="demo-toolbar">
@@ -71,23 +71,52 @@ export class DataLiveReload {
     {
       label: 'component.ts',
       lang: 'ts',
-      code: `data = signal<Employee[]>(initialRows);
+      code: `import { Component, signal } from '@angular/core';
+import { DtTableDirective, type ConfigColumns } from 'ngx-datatables-net';
 
-// Reassign a NEW array reference — the directive reconciles
-// via clear() + rows.add() + draw(), keeping page & sort.
-reload() {
-  this.data.set(fetchedRows);
+interface Person {
+  id: number;
+  name: string;
 }
-addRow() {
-  this.data.update(rows => [newRow, ...rows]);
+
+@Component({
+  selector: 'app-live',
+  imports: [DtTableDirective],
+  template: \`
+    <button type="button" (click)="reload()">Reload</button>
+    <button type="button" (click)="addRow()">Add row</button>
+
+    <table dtTable class="display" style="width:100%"
+           [dtData]="data()" [dtColumns]="columns">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+        </tr>
+      </thead>
+    </table>\`,
+})
+export class LiveComponent {
+  columns: ConfigColumns[] = [
+    { data: 'id', title: 'ID' },
+    { data: 'name', title: 'Name' },
+  ];
+
+  data = signal<Person[]>([
+    { id: 1, name: 'Ada Lovelace' },
+    { id: 2, name: 'Linus Torvalds' },
+  ]);
+
+  // Set a NEW array reference and the table reloads itself
+  // (clear + rows.add + draw), keeping the current page and sort.
+  reload() {
+    this.data.set([{ id: 3, name: 'Grace Hopper' }]);
+  }
+
+  addRow() {
+    this.data.update((rows) => [{ id: rows.length + 1, name: 'New person' }, ...rows]);
+  }
 }`,
-    },
-    {
-      label: 'template.html',
-      lang: 'html',
-      code: `<table dtTable [dtData]="data()" [dtColumns]="columns">
-  <thead>…</thead>
-</table>`,
     },
   ];
 }

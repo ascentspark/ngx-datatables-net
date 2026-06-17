@@ -7,7 +7,7 @@ import 'datatables.net-columncontrol';
 
 /**
  * ColumnControl extension: rich per-column header controls. Here each header gets an order control
- * plus a search dropdown — configured purely through the pass-through `columnControl` option.
+ * plus a search dropdown, configured purely through the pass-through `columnControl` option.
  */
 @Component({
   selector: 'demo-ext-column-control',
@@ -16,8 +16,9 @@ import 'datatables.net-columncontrol';
   template: `
     <demo-example
       title="ColumnControl"
-      description="Per-column header controls — an order toggle plus a search dropdown in every column header. Click a column's ▾ to filter that column. Configured via the columnControl option (pass-through, no library code)."
+      description="Per-column header controls, an order toggle plus a search dropdown in every column header. Click a column's ▾ to filter that column. Configured via the columnControl option (pass-through, no library code)."
       [sources]="sources"
+      docsUrl="https://datatables.net/extensions/columncontrol/"
     >
       <table
         dtTable

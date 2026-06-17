@@ -18,6 +18,7 @@ import 'datatables.net-fixedcolumns';
       title="FixedHeader & FixedColumns"
       description="FixedHeader floats the header on page scroll; FixedColumns pins the first column during horizontal scroll. Scroll the table sideways to see the pinned ID/Name columns stay put."
       [sources]="sources"
+      docsUrl="https://datatables.net/extensions/fixedheader/"
     >
       <table
         dtTable

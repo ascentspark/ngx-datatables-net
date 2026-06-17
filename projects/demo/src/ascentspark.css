@@ -1,0 +1,295 @@
+/* ============================================================
+   Ascentspark Design System, Core Tokens
+   Color, typography, spacing, shadows, transitions.
+   Source of truth: /brand-guide.md  +  ascent2025/src/styles/_theme.scss
+   ============================================================ */
+
+/* ----- Fonts -----
+   Outfit + Space Grotesk are loaded from Google Fonts. Local .ttf
+   copies live in /fonts/ if you need to bundle. JetBrains Mono is
+   reserved for code blocks and tokens, load only when needed. */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100;200;300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+:root {
+  /* ── Brand colors ─────────────────────────────────────── */
+  --asc-spark-orange:    #FF4806;   /* primary · CTAs · accents */
+  --asc-ember:           #FF8D06;   /* hover state for primary  */
+  --asc-glow-yellow:     #FFC400;   /* decorative accent only   */
+
+  /* ── Neutrals ─────────────────────────────────────────── */
+  --asc-ink-black:       #000000;   /* body text · dark surfaces*/
+  --asc-footer-black:    #101010;   /* full-bleed dark panels   */
+  --asc-pure-white:      #FFFFFF;   /* page bg · text on dark   */
+  --asc-faint:           #FAFAFA;   /* near-white surface       */
+  --asc-light-surface:   #F5F5F5;   /* soft section bg          */
+  --asc-card-blue:       #F2F6FD;   /* blog banner · card tint  */
+
+  /* ── Text greys ───────────────────────────────────────── */
+  --asc-text-body:       #333333;   /* default paragraph        */
+  --asc-text-dark:       #272727;   /* heading variant          */
+  --asc-text-mid:        #3E3E3E;   /* slightly lighter heading */
+  --asc-text-medium:     #444444;   /* medium-dark text         */
+  --asc-text-muted:      #555555;   /* secondary text           */
+  --asc-text-subtle:     #777777;   /* tertiary text            */
+  --asc-text-placeholder:#888888;   /* form placeholders        */
+  --asc-border-mid:      #AAAAAA;   /* mid-tone separator       */
+  --asc-hairline:        #E5E5E5;   /* card border · 1px rules  */
+
+  /* ── Status (use only for stated function) ────────────── */
+  --asc-success:         #00B96B;
+  --asc-error:           #D20A0A;
+  --asc-info-blue:       #1E64F7;
+  --asc-cyan:            #00AFF0;
+
+  /* ── Translucent overlays ─────────────────────────────── */
+  --asc-overlay-dark-10: rgba(0, 0, 0, 0.10);
+  --asc-overlay-dark-30: rgba(0, 0, 0, 0.30);
+  --asc-overlay-dark-50: rgba(0, 0, 0, 0.50);
+  --asc-overlay-light-50:rgba(255, 255, 255, 0.50);
+  --asc-overlay-light-80:rgba(255, 255, 255, 0.80);
+  --asc-text-footer:     rgba(255, 255, 255, 0.60);
+  --asc-border:          rgba(0, 0, 0, 0.15);
+  --asc-border-light:    rgba(0, 0, 0, 0.10);
+  --asc-cat-tint:        rgba(255, 76, 5, 0.06);   /* blog category pills */
+
+  /* ── Focus rings ──────────────────────────────────────── */
+  --asc-ring-orange:     #FFBFAE;
+  --asc-ring-blue:       #C1D5FF;
+
+  /* ── Semantic foreground / background ─────────────────── */
+  --fg-1: var(--asc-ink-black);
+  --fg-2: var(--asc-text-body);
+  --fg-3: var(--asc-text-muted);
+  --fg-4: var(--asc-text-subtle);
+  --fg-onDark: var(--asc-pure-white);
+  --fg-onDark-2: var(--asc-text-footer);
+  --fg-accent: var(--asc-spark-orange);
+
+  --bg-page:   var(--asc-pure-white);
+  --bg-soft:   var(--asc-faint);
+  --bg-tint:   var(--asc-card-blue);
+  --bg-dark:   var(--asc-footer-black);
+
+  /* ── Font families ────────────────────────────────────── */
+  --font-primary:   'Outfit', system-ui, -apple-system, sans-serif;
+  --font-secondary: 'Space Grotesk', 'Outfit', sans-serif;
+  --font-mono:      'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+
+  /* ── Spacing scale (pick from these only) ─────────────── */
+  --space-xs:   8px;
+  --space-sm:   15px;
+  --space-md:   30px;
+  --space-lg:   50px;
+  --space-xl:   80px;
+  --space-2xl:  100px;
+  --space-3xl:  120px;
+  --space-4xl:  200px;
+
+  /* ── Border radii ─────────────────────────────────────── */
+  --radius-sm: 5px;    /* pills, badges                       */
+  --radius-md: 10px;   /* cards, images                       */
+  --radius-pill: 30px; /* buttons, capsules                   */
+  --radius-pill-lg: 100px; /* oversized jump-start CTA        */
+  --radius-full: 9999px;
+
+  /* ── Shadows (subtle by default) ──────────────────────── */
+  --shadow-xs:  0px 0px 10px rgba(0,0,0,0.05);
+  --shadow-sm:  0px 0px 15px rgba(0,0,0,0.10);
+  --shadow-md:  0px 5px 20px rgba(0,0,0,0.15);
+  --shadow-lg:  0px 10px 30px rgba(0,0,0,0.04);
+  --shadow-xl:  0px 10px 60px rgba(0,0,0,0.06);   /* card hover lift     */
+  --shadow-2xl: 0px 30px 50px rgba(0,0,0,0.06);
+  --shadow-dark:-20px 16px 23px rgba(0,0,0,0.26);
+
+  /* ── Transitions ──────────────────────────────────────── */
+  --t-fast: all 0.2s ease;
+  --t-base: all 0.3s ease-in-out;
+  --t-slow: all 0.5s ease;
+
+  /* ── Layout ───────────────────────────────────────────── */
+  --container-sm: 540px;
+  --container-md: 720px;
+  --container-lg: 860px;
+  --container-xl: 1120px;
+  --container-xxl: 1200px;
+
+  /* ── Z-index stack ────────────────────────────────────── */
+  --z-behind: -1;
+  --z-base: 1;
+  --z-raised: 2;
+  --z-nav: 20;
+  --z-overlay: 100;
+  --z-menu: 101;
+  --z-modal: 1000;
+  --z-top: 2000;
+}
+
+/* ============================================================
+   Base type, match production cascade
+   Default body weight is 300 (Outfit Light) at 16/30, gives the
+   airy, editorial feel that defines Ascentspark.
+   ============================================================ */
+html, body {
+  font-family: var(--font-primary);
+  color: var(--fg-1);
+  background: var(--bg-page);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 30px;
+  -webkit-font-smoothing: antialiased;
+}
+::selection { color: var(--fg-onDark); background: var(--fg-1); }
+
+p {
+  margin: 0;
+  font-family: var(--font-primary);
+  font-size: 16px;
+  font-weight: 300;
+  line-height: 30px;
+}
+p.bold { font-weight: 600; }
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  font-family: var(--font-primary);
+  font-weight: 600;   /* base, type classes below override     */
+  color: var(--fg-1);
+}
+
+code, pre, .mono {
+  font-family: var(--font-mono);
+  font-feature-settings: 'liga' 0, 'calt' 0;
+}
+
+/* ============================================================
+   Type scale, every name below is a real production utility.
+   ============================================================ */
+
+/* Hero / banner headline */
+.heading-xl {
+  font-family: var(--font-primary);
+  font-size: 60px; font-weight: 500; line-height: 130%;
+}
+
+/* Section main titles */
+.heading-lg, .secGlobalHeading {
+  font-family: var(--font-primary);
+  font-size: 60px; font-weight: 400; line-height: 130%;
+  color: var(--fg-1);
+}
+
+/* Sub-section heading */
+.heading-md {
+  font-family: var(--font-primary);
+  font-size: 50px; font-weight: 400; line-height: 156%;
+  color: var(--fg-1);
+}
+
+/* Card / list item title */
+.heading-sm, .sectionSubHeadBlack {
+  font-family: var(--font-primary);
+  font-size: 30px; font-weight: 500; line-height: 120%;
+  color: var(--asc-text-dark);
+}
+
+/* Eyebrow, orange, lowercase. Signature treatment. Preserve. */
+.subheading {
+  font-family: var(--font-primary);
+  font-size: 30px; font-weight: 500;
+  color: var(--fg-accent);
+  text-transform: lowercase;
+}
+
+/* Uppercase eyebrow variant for badges + labels */
+.subheading-upper {
+  font-family: var(--font-primary);
+  font-size: 20px; font-weight: 200;
+  color: var(--fg-1);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Small eyebrow with orange dash before, keep the dash */
+.primary-heading {
+  font-family: var(--font-primary);
+  font-size: 20px; font-weight: 200;
+  color: var(--fg-1);
+  padding-left: 35px;
+  position: relative;
+  display: inline-block;
+}
+.primary-heading::before {
+  content: '';
+  position: absolute;
+  left: 0; top: calc(50% - 1px);
+  width: 22px; height: 2px;
+  background: var(--fg-accent);
+}
+
+/* Lead body / large body */
+.body-lg, .secGlobSubHead {
+  font-family: var(--font-primary);
+  font-size: 30px; font-weight: 400; line-height: 156%;
+  color: var(--fg-1);
+}
+
+/* Standard body / feature descriptions */
+.body-md, .secSubDesc {
+  font-family: var(--font-primary);
+  font-size: 20px; font-weight: 400; line-height: 160%;
+}
+
+/* Blog meta, labels */
+.body-sm {
+  font-family: var(--font-primary);
+  font-size: 16px; font-weight: 300; line-height: 26px;
+}
+
+/* Smallest, timestamps, tags, footnotes */
+.caption {
+  font-family: var(--font-primary);
+  font-size: 14px; font-weight: 300; line-height: 1.5;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* Decorative 186px outline behind section titles. Use sparingly. */
+.bigOutlineText {
+  font-family: var(--font-primary);
+  font-size: 186px; font-weight: 800; line-height: 140px;
+  text-transform: uppercase;
+  position: relative;
+  color: var(--bg-page);
+  -webkit-text-stroke: 1.5px var(--fg-1);
+}
+
+/* Italic, reserved for testimonials and quoted client copy */
+.brand-italic { font-style: italic; }
+
+/* Color helpers */
+.orange-txt, .primary-text { color: var(--fg-accent); }
+.muted-txt   { color: var(--fg-3); }
+.subtle-txt  { color: var(--fg-4); }
+
+/* ============================================================
+   Responsive overrides, production cascade scales down ~50% on
+   mobile. Mirror the key breakpoints so component teams can rely
+   on the type scale without per-component media queries.
+   ============================================================ */
+@media (max-width: 1199px) {
+  .heading-xl, .heading-lg, .secGlobalHeading { font-size: 50px; }
+  .heading-md { font-size: 40px; }
+}
+@media (max-width: 991px) {
+  .body-lg, .secGlobSubHead { font-size: 24px; }
+}
+@media (max-width: 767px) {
+  .heading-xl, .heading-lg, .secGlobalHeading { font-size: 30px; }
+  .heading-md { font-size: 30px; }
+  .heading-sm, .sectionSubHeadBlack { font-size: 24px; }
+  .subheading { font-size: 14px; }
+  .body-md, .secSubDesc { font-size: 16px; }
+  .body-sm { font-size: 14px; }
+  .bigOutlineText { font-size: 60px; line-height: 40px; }
+  p { font-size: 14px; line-height: 22px; }
+}

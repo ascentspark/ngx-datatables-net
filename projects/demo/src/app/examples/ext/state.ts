@@ -8,7 +8,7 @@ import 'datatables.net-staterestore';
 
 /**
  * State persistence. `stateSave: true` remembers paging / sort / search across page reloads
- * (localStorage) — change the sort or search, reload the page, and your view is restored. The
+ * (localStorage), change the sort or search, reload the page, and your view is restored. The
  * StateRestore extension layers named, savable states on top via Buttons (see the source note).
  */
 @Component({
@@ -18,8 +18,9 @@ import 'datatables.net-staterestore';
   template: `
     <demo-example
       title="State persistence (stateSave & StateRestore)"
-      description="stateSave: true persists the table state (page/sort/search) to localStorage. Sort a column or type a search, then reload — your view is restored. StateRestore adds named saved states (see source)."
+      description="stateSave: true persists the table state (page/sort/search) to localStorage. Sort a column or type a search, then reload, your view is restored. StateRestore adds named saved states (see source)."
       [sources]="sources"
+      docsUrl="https://datatables.net/extensions/staterestore/"
     >
       <div class="demo-toolbar">
         <button type="button" class="demo-btn" (click)="reload()" data-testid="reload">

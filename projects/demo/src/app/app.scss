@@ -8,67 +8,118 @@
   justify-content: space-between;
   background: var(--demo-surface);
   border-bottom: 1px solid var(--demo-border);
-  padding: 0.8rem 1.5rem;
+  padding: 0.9rem 1.75rem;
   position: sticky;
   top: 0;
-  z-index: 10;
+  z-index: var(--z-nav);
 }
 
+/* Left: what this is. */
 .demo-header__brand {
   display: flex;
-  align-items: baseline;
-  gap: 0.75rem;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 0;
 }
 
-.demo-header__logo {
-  font-weight: 700;
+.demo-header__name {
+  font-family: var(--font-primary);
+  font-weight: 600;
   font-size: 1.15rem;
-  color: var(--demo-accent);
+  letter-spacing: -0.01em;
+  color: var(--demo-text);
   text-decoration: none;
 }
 
-.demo-header__tag {
+.demo-header__tagline {
+  font-size: 0.9rem;
   color: var(--demo-muted);
-  font-size: 0.85rem;
+}
+
+.demo-header__tagline a {
+  color: var(--demo-text);
+  text-decoration: none;
+  border-bottom: 1px solid var(--demo-border);
+}
+.demo-header__tagline a:hover {
+  border-bottom-color: var(--demo-muted);
+}
+
+/* Right: who maintains it, smaller and quieter. */
+.demo-header__meta {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.demo-header__maintainer {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.78rem;
+  color: var(--demo-muted);
+  text-decoration: none;
+}
+.demo-header__maintainer:hover {
+  color: var(--demo-text);
+}
+
+.demo-header__maintainer-name {
+  font-weight: 600;
+  color: var(--demo-text);
+}
+
+.demo-header__glyph {
+  color: var(--asc-spark-orange);
+  font-size: 0.95rem;
 }
 
 .demo-header__dark {
   background: transparent;
   border: 1px solid var(--demo-border);
-  border-radius: 6px;
+  border-radius: var(--radius-pill);
   color: var(--demo-text);
-  padding: 0.35rem 0.7rem;
+  font-family: var(--font-primary);
+  padding: 0.35rem 0.9rem;
   font-size: 0.8rem;
+  font-weight: 500;
   cursor: pointer;
+  transition: var(--t-fast);
+}
+
+.demo-header__dark:hover {
+  border-color: var(--asc-spark-orange);
 }
 
 .demo-layout {
   display: grid;
-  grid-template-columns: 250px 1fr;
+  grid-template-columns: 264px 1fr;
   align-items: start;
 }
 
 .demo-sidebar {
   position: sticky;
-  top: 57px;
-  height: calc(100vh - 57px);
+  top: 61px;
+  height: calc(100vh - 61px);
   overflow-y: auto;
-  padding: 1rem 0.75rem 2rem;
+  padding: 1.5rem 1rem 3rem;
   border-right: 1px solid var(--demo-border);
   background: var(--demo-surface);
 }
 
 .demo-navgroup {
-  margin-bottom: 1.1rem;
+  margin-bottom: 1.4rem;
 }
 
 .demo-navgroup__title {
-  margin: 0 0 0.35rem;
-  padding: 0 0.6rem;
-  font-size: 0.7rem;
+  margin: 0 0 0.5rem;
+  padding: 0 0.7rem;
+  font-family: var(--font-primary);
+  font-size: 0.72rem;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--demo-muted);
+  letter-spacing: 0.1em;
+  color: var(--demo-text);
 }
 
 .demo-navgroup__list {
@@ -79,24 +130,29 @@
 
 .demo-navlink {
   display: block;
-  padding: 0.35rem 0.6rem;
-  border-radius: 6px;
+  padding: 0.4rem 0.7rem;
+  border-radius: var(--radius-sm);
   color: var(--demo-text);
   text-decoration: none;
-  font-size: 0.875rem;
+  font-size: 0.92rem;
+  font-weight: 300;
+  transition: var(--t-fast);
 }
 
-.demo-navlink:hover {
-  background: var(--demo-bg);
+/* Only non-active links get the grey hover, otherwise the active link's white text would sit on
+   a light-grey background and become unreadable. */
+.demo-navlink:hover:not(.demo-navlink--active) {
+  background: var(--demo-soft);
 }
 
 .demo-navlink--active {
-  background: var(--demo-accent);
-  color: #fff;
+  background: var(--asc-spark-orange);
+  color: var(--asc-pure-white);
+  font-weight: 500;
 }
 
 .demo-main {
-  padding: 1.5rem;
+  padding: 2rem 2.25rem;
   min-width: 0;
-  max-width: 1100px;
+  max-width: 1120px;
 }

@@ -11,7 +11,10 @@ export interface NavGroup {
 export const NAV: NavGroup[] = [
   {
     title: 'Getting started',
-    items: [{ path: '', label: 'Basic table' }],
+    items: [
+      { path: '', label: 'Introduction' },
+      { path: 'basic', label: 'Basic table' },
+    ],
   },
   {
     title: 'Data sourcing',

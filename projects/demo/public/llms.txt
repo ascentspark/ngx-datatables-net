@@ -1,0 +1,39 @@
+# ngx-datatables-net
+
+> Modern Angular wrapper for DataTables.net. It lets you use DataTables (sorting, search,
+> pagination, and the full set of DataTables extensions) in Angular 20, 21 and 22 through a
+> directive driven by signals, with no jQuery in your own code. Maintained by Ascentspark.
+
+ngx-datatables-net is published on npm as `ngx-datatables-net`. You add the `[dtTable]` directive
+to a native `<table>`, bind `dtData` and `dtColumns` as Angular inputs, and read events and state
+back as signals. It is standalone, zoneless-ready and SSR-safe, and ships four styling adapters:
+the DataTables default (dt), Bootstrap 5, Tailwind, and Material.
+
+## Documentation
+
+- [Getting started](https://ngx-datatables-net.ascentspark.com/): install, configure and a copy-paste first table.
+- [Live examples](https://ngx-datatables-net.ascentspark.com/): data sourcing, features, styling adapters, and every DataTables extension.
+- [GitHub repository](https://github.com/ascentspark/ngx-datatables-net): source, README, architecture and security notes.
+- [DataTables.net](https://datatables.net): the underlying table library this package wraps.
+
+## Key facts
+
+- Install: `npm install ngx-datatables-net datatables.net datatables.net-dt`
+- Selector: attribute directive `[dtTable]` on a `<table>` element.
+- Inputs: `dtOptions` (DataTables Config), `dtData` (row array), `dtColumns` (column definitions).
+- Outputs: `dtInit`, `dtDraw`, `dtPage`, `dtXhr`, `dtSelect`, `dtDeselect`, `dtRowClick`.
+- Reload data by assigning a new array to the `dtData` signal; no manual redraw trigger.
+- Escaped output by default via `withSafeDefaults()`; opt into HTML with a DomSanitizer-backed renderer.
+- One package major per Angular major: `22.x` (latest), `21.x` (ng21), `20.x` (ng20).
+- License: MIT, by Ascentspark (https://ascentspark.com).
+
+## FAQ
+
+- Does it require jQuery? You never write jQuery; the library uses DataTables' non-jQuery API. jQuery remains a transitive dependency of datatables.net but never appears in your code.
+- Which Angular versions? Angular 20, 21 and 22, one package major each (22.x / 21.x / 20.x).
+- How to reload data? Assign a new array to the dtData signal; the table reconciles automatically, no manual trigger.
+- NgModules or Zone.js? Neither. Standalone directive, zoneless-ready (and works in zoned apps too).
+- XSS safety? withSafeDefaults() escapes columns without a renderer; opt into HTML via the DomSanitizer-backed renderer.
+- Ajax / server-side? Yes, via the ajax option (string, object, or function) and serverSide: true.
+- Extensions? All official DataTables extensions work through pass-through dtOptions; Editor (commercial) via the exposed Api.
+- SSR? Yes, the table initialises in the browser only (afterNextRender).

@@ -7,7 +7,7 @@ import type { Config } from 'datatables.net';
  *
  * This is the framework-agnostic, **non-jQuery** entry point. The default export of
  * `datatables.net` (and of every styling package such as `datatables.net-dt`) is exactly
- * this constructor — the styling packages return the *same* constructor after registering
+ * this constructor, the styling packages return the *same* constructor after registering
  * their CSS classes as a side-effect of import.
  */
 export type DataTableConstructor = typeof DataTableCore;
@@ -36,7 +36,7 @@ export const DT_DEFAULT_OPTIONS = new InjectionToken<Config>(
  * DI token for a CSS class the directive adds to the DataTables container element after init.
  *
  * Styling adapters that ship their own scoped stylesheet (Tailwind, Material) provide this so the
- * directive auto-scopes their CSS — e.g. `ngxdt-tailwind` / `ngxdt-material`. This lets the authored
+ * directive auto-scopes their CSS, e.g. `ngxdt-tailwind` / `ngxdt-material`. This lets the authored
  * adapter CSS be self-contained and lets multiple styling themes coexist on one page.
  */
 export const DT_STYLE_SCOPE = new InjectionToken<string>(

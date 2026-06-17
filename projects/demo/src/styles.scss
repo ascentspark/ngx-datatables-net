@@ -1,21 +1,27 @@
-/* Global demo styles. DataTables' own CSS is added via angular.json (dt adapter + tailwind/material). */
+/* Demo global styles, built on the Ascentspark design tokens (ascentspark.css).
+   DataTables theme CSS is added via angular.json. */
 
 :root {
-  --demo-bg: #f7f8fa;
-  --demo-surface: #ffffff;
-  --demo-border: #e3e6ea;
-  --demo-text: #1f2933;
-  --demo-muted: #66727f;
-  --demo-accent: #2f6fed;
+  /* Map the demo's local variables onto the Ascentspark tokens. */
+  --demo-bg: var(--asc-pure-white);
+  --demo-surface: var(--asc-pure-white);
+  --demo-soft: var(--asc-faint);
+  --demo-border: var(--asc-hairline);
+  --demo-text: var(--asc-ink-black);
+  --demo-muted: var(--asc-text-subtle);
+  --demo-accent: var(--asc-spark-orange);
+  --demo-accent-hover: var(--asc-ember);
+  --demo-tint: var(--asc-cat-tint);
 }
 
 :root.dark {
-  --demo-bg: #0b1220;
-  --demo-surface: #111a2b;
-  --demo-border: #243044;
-  --demo-text: #e2e8f0;
-  --demo-muted: #93a1b5;
-  --demo-accent: #6ea0ff;
+  --demo-bg: #0c0c0c;
+  --demo-surface: #141414;
+  --demo-soft: #1a1a1a;
+  --demo-border: #2a2a2a;
+  --demo-text: #f2f2f2;
+  --demo-muted: #9a9a9a;
+  --demo-tint: rgba(255, 76, 5, 0.12);
 }
 
 * {
@@ -28,54 +34,77 @@ body {
   padding: 0;
   background: var(--demo-bg);
   color: var(--demo-text);
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  font-size: 15px;
+  font-family: var(--font-primary);
+  font-size: 16px;
+  font-weight: 400;
   line-height: 1.5;
 }
 
-/* Shared example helpers */
+/* Lowercase orange eyebrow, the signature Ascentspark treatment. */
+.demo-eyebrow {
+  font-family: var(--font-primary);
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-transform: lowercase;
+  color: var(--asc-spark-orange);
+}
+
 .demo-h2 {
   margin: 0 0 0.25rem;
-  font-size: 1.35rem;
+  font-family: var(--font-primary);
+  font-size: 1.9rem;
+  font-weight: 500;
+  line-height: 1.2;
 }
 
 .demo-sub {
-  margin: 0 0 1rem;
+  margin: 0 0 1.25rem;
   color: var(--demo-muted);
+  font-weight: 300;
 }
 
 code {
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  background: rgba(127, 127, 127, 0.14);
-  padding: 0.05rem 0.3rem;
-  border-radius: 4px;
-  font-size: 0.9em;
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  background: var(--demo-tint);
+  color: var(--asc-spark-orange);
+  padding: 0.08rem 0.35rem;
+  border-radius: var(--radius-sm);
 }
 
 .demo-note {
   margin-top: 1rem;
-  padding: 0.6rem 0.85rem;
-  background: rgba(47, 111, 237, 0.08);
-  border: 1px solid rgba(47, 111, 237, 0.25);
-  border-radius: 6px;
+  padding: 0.7rem 1rem;
+  background: var(--demo-tint);
+  border: 1px solid var(--asc-ring-orange);
+  border-radius: var(--radius-md);
+  font-size: 0.95rem;
 }
 
 .demo-toolbar {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 0.6rem;
   align-items: center;
-  margin-bottom: 0.85rem;
+  margin-bottom: 1rem;
 }
 
 .demo-btn {
-  background: var(--demo-accent);
-  color: #fff;
+  background: var(--asc-spark-orange);
+  color: var(--asc-pure-white);
   border: none;
-  border-radius: 6px;
-  padding: 0.4rem 0.8rem;
-  font-size: 0.85rem;
+  border-radius: var(--radius-pill);
+  padding: 0.5rem 1.1rem;
+  font-family: var(--font-primary);
+  font-size: 0.9rem;
+  font-weight: 500;
   cursor: pointer;
+  transition: var(--t-fast);
+}
+
+.demo-btn:hover {
+  background: var(--asc-ember);
 }
 
 .demo-btn--ghost {
@@ -84,7 +113,55 @@ code {
   border: 1px solid var(--demo-border);
 }
 
-/* DataTables default theme tweak inside the demo surface */
-table.dataTable {
+.demo-btn--ghost:hover {
+  background: var(--demo-soft);
+  border-color: var(--asc-spark-orange);
+}
+
+/* Form controls in example toolbars. */
+.demo-toolbar select,
+.demo-toolbar input {
+  font-family: var(--font-primary);
+  font-size: 0.9rem;
+  padding: 0.35rem 0.55rem;
+  border: 1px solid var(--demo-border);
+  border-radius: var(--radius-sm);
   background: var(--demo-surface);
+  color: var(--demo-text);
+}
+
+.demo-toolbar input:focus,
+.demo-toolbar select:focus {
+  outline: none;
+  border-color: var(--asc-spark-orange);
+  box-shadow: 0 0 0 3px var(--asc-ring-orange);
+}
+
+/* ---- DataTables ----
+   Leave DataTables looking like DataTables. We only stop the demo's editorial line-height and
+   light font-weight from being inherited by the generated controls, which otherwise makes the
+   length / search / pagination rows tall and misaligned. No colours or layout are imposed. */
+.dt-container {
+  line-height: normal;
+  font-weight: 400;
+}
+
+.dt-container .dt-length,
+.dt-container .dt-search,
+.dt-container .dt-info,
+.dt-container .dt-paging {
+  font-weight: 400;
+}
+
+/* Bootstrap 5 styling page only: datatables.net-bs5 puts .dt-paging-button on the <li>, but the
+   globally bundled dt theme also styles .dt-paging-button (it expects a <button>), so the <li> gets
+   dt's padding/border/radius on top of Bootstrap's .page-link, double-boxing the pager. Inside a
+   Bootstrap .pagination, strip the dt box so only Bootstrap styles the buttons. Matches nowhere else
+   (no .pagination on the dt / Tailwind / Material pages). */
+.dt-container .dt-paging .pagination li.dt-paging-button {
+  padding: 0;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  background-color: transparent;
 }

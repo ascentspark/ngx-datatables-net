@@ -1,10 +1,10 @@
 /*!
- * ngx-datatables-net — Material styling adapter
+ * ngx-datatables-net, Material styling adapter
  *
  * Self-contained CSS giving DataTables' default markup an Angular Material / Material Design 3 look
  * (elevated card surface, Roboto typography, primary-colour accents, comfortable row height, subtle
  * row dividers). Scoped under `.ngxdt-material`, added to the container by the `withMaterial()`
- * adapter. DataTables has NO official Material styling — this is authored by us.
+ * adapter. DataTables has NO official Material styling, this is authored by us.
  *
  * Include in your app (angular.json styles, or @import):
  *   "node_modules/ngx-datatables-net/material/styles/ngx-datatables-net.material.css"
@@ -137,7 +137,7 @@
   font-size: 0.8125rem;
 }
 
-/* Pagination — pill buttons with primary "current" */
+/* Pagination, pill buttons with primary "current" */
 .ngxdt-material .dt-paging {
   display: inline-flex;
   gap: 0.25rem;

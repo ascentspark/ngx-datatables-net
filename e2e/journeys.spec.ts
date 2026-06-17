@@ -12,7 +12,7 @@ async function infoText(page: Page): Promise<string> {
 }
 
 test('basic table: loads, sorts, and searches', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/basic');
   const rows = page.locator('table.dataTable tbody tr');
   await expect(rows).toHaveCount(10);
   await expect(page.locator('.dt-info').first()).toContainText('of 57 entries');
@@ -28,7 +28,7 @@ test('basic table: loads, sorts, and searches', async ({ page }) => {
 });
 
 test('row click surfaces typed row data', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/basic');
   await page.locator('table.dataTable tbody tr').first().click();
   await expect(page.getByTestId('row-click-note')).toContainText('Last clicked:');
 });
@@ -56,7 +56,7 @@ test('custom plugin: range slider re-filters via DataTable.ext.search', async ({
   const info = page.locator('.dt-info').first();
   const fullText = await info.innerText();
   expect(fullText).toContain('of 57');
-  // Raise the minimum age — far fewer rows should remain. Range inputs ignore fill(),
+  // Raise the minimum age, far fewer rows should remain. Range inputs ignore fill(),
   // so set the value and dispatch the input event the component listens for.
   const slider = page.getByTestId('min-age');
   await slider.evaluate((el: HTMLInputElement) => {
@@ -81,6 +81,6 @@ test('styling adapters render under each theme', async ({ page }) => {
   for (const path of ['styling/dt', 'styling/bs5', 'styling/tailwind', 'styling/material']) {
     await page.goto(`/${path}`);
     await expect(page.locator('table.dataTable tbody tr').first()).toBeVisible();
-    await expect(page.getByTestId('styling-title')).toBeVisible();
+    await expect(page.getByTestId('styled-table')).toBeVisible();
   }
 });

@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { DtTableDirective, type Config } from 'ngx-datatables-net';
 import { EMPLOYEES, EMPLOYEE_COLUMNS, type Employee } from '../../data/employees';
 import { ExampleCard, type ExampleSource } from '../../shared/example-card';
-// Several extensions composed on one table — all configured through pass-through dtOptions.
+// Several extensions composed on one table, all configured through pass-through dtOptions.
 import 'datatables.net-buttons';
 import 'datatables.net-buttons/js/buttons.print';
 import 'datatables.net-buttons/js/buttons.colVis';
@@ -13,7 +13,7 @@ import 'datatables.net-fixedheader';
 
 /**
  * Combination showcase: Buttons + Select + SearchPanes + Responsive + FixedHeader on a single
- * table — proving extensions compose purely through the pass-through `Config`, with no per-extension
+ * table, proving extensions compose purely through the pass-through `Config`, with no per-extension
  * code in the directive.
  */
 @Component({
@@ -23,8 +23,9 @@ import 'datatables.net-fixedheader';
   template: `
     <demo-example
       title="Combination showcase"
-      description="Buttons (print/colvis) + Select (multi) + SearchPanes + Responsive + FixedHeader, all on one table — composed entirely through dtOptions. This proves the directive forwards the full Config so extensions just work together."
+      description="Buttons (print/colvis) + Select (multi) + SearchPanes + Responsive + FixedHeader, all on one table, composed entirely through dtOptions. This proves the directive forwards the full Config so extensions just work together."
       [sources]="sources"
+      docsUrl="https://datatables.net/extensions/"
     >
       <table
         dtTable

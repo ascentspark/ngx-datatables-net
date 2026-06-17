@@ -1,0 +1,30 @@
+# Static hosting rules for the prerendered demo (Apache).
+#
+# The landing page is prerendered to /index.html; every other route is client-rendered and shares
+# the /index.csr.html shell. Serve real files as-is, "/" as the prerendered home, and fall back to
+# the client shell for any other path so deep links (e.g. /features/sorting) boot the SPA instead
+# of returning 404.
+
+DirectoryIndex index.html
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Serve existing files and directories directly.
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # Anything else: hand off to the client-render shell.
+  RewriteRule ^ /index.csr.html [L]
+</IfModule>
+
+# Long-cache the hashed build assets; never cache the HTML entry points.
+<IfModule mod_headers.c>
+  <FilesMatch "\.(?:js|css|woff2?|png|jpg|jpeg|svg|ico)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+  <FilesMatch "\.html$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
+</IfModule>

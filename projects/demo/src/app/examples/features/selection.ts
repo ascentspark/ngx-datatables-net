@@ -7,7 +7,7 @@ import 'datatables.net-select';
 
 /**
  * Multi-row selection via the Select extension. The directive exposes the live selection as the
- * `selected()` signal (zoneless-native), so the consumer just reads it — no manual event wiring.
+ * `selected()` signal (zoneless-native), so the consumer just reads it, no manual event wiring.
  */
 @Component({
   selector: 'demo-features-selection',
@@ -16,12 +16,12 @@ import 'datatables.net-select';
   template: `
     <demo-example
       title="Selection (two-way)"
-      description="Click rows to select (Ctrl/Shift for multi). The directive's selected() signal reflects the current selection reactively — read it directly, no event plumbing."
+      description="Click rows to select (Ctrl/Shift for multi). The directive's selected() signal reflects the current selection reactively, read it directly, no event plumbing."
       [sources]="sources"
     >
       <p class="demo-note" data-testid="selection-summary">
         Selected {{ table().selected().length }} row(s):
-        {{ selectedNames() || '—' }}
+        {{ selectedNames() || '-' }}
       </p>
 
       <table
@@ -78,9 +78,16 @@ selectedNames = () => this.table().selected().map(e => e.name).join(', ');`,
       label: 'template.html',
       lang: 'html',
       code: `<p>Selected {{ table().selected().length }} row(s)</p>
-<table dtTable #t="dtTable" [dtData]="data"
-       [dtColumns]="columns" [dtOptions]="options">
-  <thead>…</thead>
+<table dtTable #t="dtTable" class="display" style="width:100%"
+       [dtData]="data" [dtColumns]="columns" [dtOptions]="options">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Position</th>
+      <th>Office</th>
+    </tr>
+  </thead>
 </table>`,
     },
   ];

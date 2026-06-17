@@ -9,7 +9,7 @@ mechanics are modern (standalone, signals, zoneless). Here's the translation.
 |----------------------|----------------------|
 | `DataTablesModule` (NgModule import) | `DtTableDirective` (standalone import) + `provideDataTables(...)` |
 | `[dtOptions]="dtOptions"` | `[dtOptions]="options"` (typed `Config`, structural change detection) |
-| `[dtTrigger]="dtTrigger"` + `dtTrigger.next()` | **gone** — assign a new `[dtData]` array; the table reconciles automatically |
+| `[dtTrigger]="dtTrigger"` + `dtTrigger.next()` | **gone**, assign a new `[dtData]` array; the table reconciles automatically |
 | `[dtInstance]` promise | `(dtInit)="..."` output **or** `#t="dtTable"` → `t.instance()` signal |
 | `ADTSettings` bespoke type | DataTables' own `Config` (re-exported) |
 | jQuery + `zone.js` reliance | non-jQuery API, zoneless-ready |
@@ -55,9 +55,9 @@ this.data.set(rows); // a new array reference reconciles the table (clear → ro
 // before
 this.dtElement.dtInstance.then((api: Api) => api.column(0).visible(false));
 
-// after — via output
+// after, via output
 onInit(api: Api<Row>) { api.column(0).visible(false); }
-// after — via template ref
+// after, via template ref
 table = viewChild.required<DtTableDirective<Row>>('t');
 this.table().instance()?.column(0).visible(false);
 ```
@@ -65,7 +65,7 @@ this.table().instance()?.column(0).visible(false);
 ## Options & columns
 
 Use DataTables' own `Config` / `ConfigColumns` types (re-exported from `ngx-datatables-net`) instead
-of `ADTSettings`. Do **not** install `@types/datatables.net` — DataTables 2.x ships its own types and
+of `ADTSettings`. Do **not** install `@types/datatables.net`, DataTables 2.x ships its own types and
 the DefinitelyTyped package conflicts.
 
 ## Custom controls

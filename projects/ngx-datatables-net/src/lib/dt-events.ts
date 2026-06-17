@@ -27,7 +27,7 @@ export interface DtRowClickEvent<T = unknown> {
 export interface DtSelectEvent<T = unknown> {
   readonly api: Api<T>;
   readonly event: Event;
-  /** `'row'`, `'column'` or `'cell'` — the type of items affected. */
+  /** `'row'`, `'column'` or `'cell'`, the type of items affected. */
   readonly itemType: 'row' | 'column' | 'cell' | string;
   /** Indexes affected by the (de)selection. */
   readonly indexes: unknown;

@@ -4,11 +4,15 @@ import {
   provideZonelessChangeDetection,
 } from '@angular/core';
 import { provideRouter, withInMemoryScrolling } from '@angular/router';
-import { provideDataTables, withOptions, withSafeDefaults } from 'ngx-datatables-net';
-import { withDefaultStyling } from 'ngx-datatables-net/dt';
 
 import { routes } from './app.routes';
 
+/**
+ * Shared application config used by both the browser bootstrap and the prerenderer. It deliberately
+ * contains NO DataTables providers: those (and the styling-adapter import they pull in) live in the
+ * browser entry `main.ts` only, so the server bundle that prerenders the landing page never has to
+ * evaluate DataTables/jQuery.
+ */
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
@@ -19,14 +23,6 @@ export const appConfig: ApplicationConfig = {
     provideRouter(
       routes,
       withInMemoryScrolling({ anchorScrolling: 'enabled', scrollPositionRestoration: 'enabled' }),
-    ),
-    // DataTables: default ("dt") styling adapter + a couple of app-wide option defaults.
-    provideDataTables(
-      withDefaultStyling(),
-      // Escape columns without an explicit renderer — neutralises DataTables' unsafe
-      // HTML-by-default behavior across every example table.
-      withSafeDefaults(),
-      withOptions({ pageLength: 10, lengthMenu: [5, 10, 25, 50, 100] }),
     ),
   ],
 };

@@ -1,0 +1,182 @@
+:host {
+  display: block;
+  max-width: 820px;
+}
+
+/* ---- Hero ---- */
+.gs-hero {
+  padding: 0.5rem 0 2.5rem;
+  border-bottom: 1px solid var(--demo-border);
+  margin-bottom: 2.5rem;
+}
+
+.gs-title {
+  margin: 0;
+  font-family: var(--font-primary);
+  font-size: 2.4rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.gs-tagline {
+  margin: 0.4rem 0 0;
+  font-size: 1.25rem;
+  font-weight: 400;
+  color: var(--demo-text);
+}
+
+.gs-tagline a {
+  color: var(--demo-text);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.gs-lead {
+  margin: 1.1rem 0 0;
+  font-size: 1.02rem;
+  line-height: 1.65;
+  color: var(--demo-muted);
+  max-width: 70ch;
+}
+
+.gs-maintainer {
+  margin: 1rem 0 0;
+  font-size: 0.9rem;
+  color: var(--demo-muted);
+}
+
+.gs-maintainer a {
+  color: var(--demo-text);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* ---- Steps ---- */
+.gs-h2 {
+  margin: 0 0 1rem;
+  font-family: var(--font-primary);
+  font-size: 1.7rem;
+  font-weight: 500;
+}
+
+.gs-note {
+  margin: 0 0 1.75rem;
+  padding: 0.8rem 1rem;
+  background: var(--demo-tint);
+  border: 1px solid var(--asc-ring-orange);
+  border-radius: var(--radius-md);
+  font-size: 0.95rem;
+  color: var(--demo-text);
+}
+
+.gs-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.gs-step {
+  display: grid;
+  grid-template-columns: 2.25rem 1fr;
+  gap: 1rem;
+  padding-bottom: 1.9rem;
+}
+
+.gs-step__num {
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: var(--radius-full);
+  background: var(--asc-spark-orange);
+  color: var(--asc-pure-white);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gs-step__body {
+  min-width: 0;
+}
+
+.gs-step__title {
+  margin: 0.25rem 0 0.4rem;
+  font-family: var(--font-primary);
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+.gs-step__body p {
+  margin: 0 0 0.7rem;
+  color: var(--demo-muted);
+  line-height: 1.6;
+}
+
+.gs-step__body code {
+  white-space: nowrap;
+}
+
+/* Dark code block, JetBrains Mono. Reset the global inline-code styling inside it. */
+.gs-code {
+  margin: 0;
+  padding: 1rem 1.2rem;
+  background: var(--asc-footer-black);
+  border-radius: var(--radius-md);
+  overflow-x: auto;
+  color: #e6e6e6;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  line-height: 1.6;
+}
+.gs-code code {
+  background: none;
+  color: inherit;
+  padding: 0;
+  font-size: inherit;
+  white-space: pre;
+}
+
+/* ---- Next ---- */
+.gs-next {
+  margin-top: 1rem;
+  padding-top: 1.75rem;
+  border-top: 1px solid var(--demo-border);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.gs-next .demo-btn {
+  text-decoration: none;
+}
+
+.gs-next__hint {
+  color: var(--demo-muted);
+  font-size: 0.95rem;
+}
+
+/* ---- FAQ ---- */
+.gs-faq {
+  margin-top: 2.5rem;
+  padding-top: 1.75rem;
+  border-top: 1px solid var(--demo-border);
+}
+
+.gs-faq__item {
+  padding: 0.9rem 0;
+  border-bottom: 1px solid var(--demo-border);
+}
+
+.gs-faq__q {
+  margin: 0 0 0.35rem;
+  font-family: var(--font-primary);
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.gs-faq__a {
+  margin: 0;
+  color: var(--demo-muted);
+  line-height: 1.65;
+}

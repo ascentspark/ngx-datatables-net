@@ -1,24 +1,28 @@
 # ngx-datatables-net
 
-Modern Angular wrapper for [DataTables](https://datatables.net) using its **non-jQuery API** —
-standalone, signal-based, zoneless-ready. Supports **Angular 20, 21 and 22**.
+[DataTables](https://datatables.net) is a widely used JavaScript library that turns a plain HTML
+table into an interactive one: sorting, searching, pagination, and a large set of extensions for
+things like export buttons, row selection, fixed headers and responsive layouts.
 
-The spiritual successor to the archived `angular-datatables`, rebuilt for the modern Angular surface
-(standalone components, signals, `afterRenderEffect`, zoneless change detection) with **escape-by-default
-XSS safety** and a clean, escape-hatch-friendly API.
+`ngx-datatables-net` lets you use DataTables from Angular without writing any jQuery. You put a
+directive on a `<table>`, bind your options and data as Angular inputs, and read events and state
+back as signals. It supports Angular 20, 21 and 22.
 
-> **About jQuery:** DataTables still depends on jQuery internally (it's a transitive dependency of
-> `datatables.net`). This library never imports or calls jQuery — you write plain Angular — but
-> jQuery is present in your dependency tree. We're transparent about this rather than hiding it.
+It is the successor to the archived `angular-datatables`, rebuilt for standalone components, signals
+and zoneless change detection, with escaped output by default.
 
-## Installation
+A note on jQuery: DataTables still uses jQuery internally, so it sits in your dependency tree as a
+transitive dependency of `datatables.net`. This library never imports or calls jQuery itself. You
+write plain Angular.
+
+## Install
 
 ```bash
 npm install ngx-datatables-net datatables.net datatables.net-dt
 ```
 
-`datatables.net` is a peer dependency; pick a styling package (`datatables.net-dt` for the default
-theme, `datatables.net-bs5` for Bootstrap 5). Add the stylesheet to `angular.json`:
+`datatables.net` is a peer dependency. Pick a styling package (`datatables.net-dt` for the default
+theme, `datatables.net-bs5` for Bootstrap 5) and add its stylesheet in `angular.json`:
 
 ```jsonc
 "styles": [
@@ -28,6 +32,8 @@ theme, `datatables.net-bs5` for Bootstrap 5). Add the stylesheet to `angular.jso
 ```
 
 ## Quick start
+
+Register the providers once:
 
 ```ts
 // app.config.ts
@@ -40,15 +46,16 @@ export const appConfig = {
     provideZonelessChangeDetection(),
     provideDataTables(
       withDefaultStyling(),
-      withSafeDefaults(),                 // escape columns without a renderer (XSS safety)
-      withOptions({ pageLength: 10 }),    // app-wide defaults
+      withSafeDefaults(),               // escape columns that have no renderer
+      withOptions({ pageLength: 10 }),  // app-wide defaults
     ),
   ],
 };
 ```
 
+Then use the directive on a table:
+
 ```ts
-// component
 import { Component, signal } from '@angular/core';
 import { DtTableDirective, type Api, type ConfigColumns } from 'ngx-datatables-net';
 
@@ -58,16 +65,20 @@ import { DtTableDirective, type Api, type ConfigColumns } from 'ngx-datatables-n
     <table dtTable class="display" style="width:100%"
            [dtData]="data()" [dtColumns]="columns"
            (dtInit)="onInit($event)" (dtRowClick)="onRowClick($event.row)">
-      <thead><tr><th>ID</th><th>Name</th></tr></thead>
+      <thead>
+        <tr><th>ID</th><th>Name</th></tr>
+      </thead>
     </table>`,
 })
 export class UsersTable {
   data = signal([{ id: 1, name: 'Ada' }, { id: 2, name: 'Linus' }]);
   columns: ConfigColumns[] = [{ data: 'id', title: 'ID' }, { data: 'name', title: 'Name' }];
-  onInit(api: Api<{ id: number; name: string }>) { /* escape hatch to the full DataTables Api */ }
+  onInit(api: Api<{ id: number; name: string }>) { /* the full DataTables Api, for imperative use */ }
   onRowClick(row: { id: number; name: string }) { /* typed row data */ }
 }
 ```
+
+To reload the table later, set a new array on the `data` signal. There is no manual redraw trigger.
 
 ## The directive: `[dtTable]`
 
@@ -76,45 +87,45 @@ Put it on a native `<table>`. Reference it with `#t="dtTable"`.
 ### Inputs
 
 | Input | Type | Notes |
-|-------|------|-------|
-| `dtOptions` | `Config` | DataTables options. A **structural** change recreates the table (inline object literals are safe — no reference-churn loop). |
-| `dtData` | `readonly T[]` | Row data. A new array reference reconciles via the cheap `clear → rows.add → draw` path (keeps current page). |
-| `dtColumns` | `ConfigColumns[]` | Column definitions (convenience for `options.columns`). |
+| ----- | ---- | ----- |
+| `dtOptions` | `Config` | DataTables options. Changing the contents recreates the table. Inline object literals are safe; change detection is structural, not by reference. |
+| `dtData` | `readonly T[]` | Row data. A new array reference reloads the rows in place and keeps the current page. |
+| `dtColumns` | `ConfigColumns[]` | Column definitions. A shorthand for `options.columns`. |
 
 ### Outputs
 
 | Output | Payload | Fires on |
-|--------|---------|----------|
-| `dtInit` | `Api<T>` | once, after creation |
+| ------ | ------- | -------- |
+| `dtInit` | `Api<T>` | once, after the table is created |
 | `dtDraw` | `DtEvent<T>` | DataTables `draw` |
 | `dtPage` | `DtEvent<T>` | DataTables `page` |
-| `dtXhr` | `DtEvent<T>` | Ajax/server-side load |
+| `dtXhr` | `DtEvent<T>` | Ajax or server-side load |
 | `dtSelect` / `dtDeselect` | `DtSelectEvent<T>` | Select extension |
-| `dtRowClick` | `DtRowClickEvent<T>` | row click (typed row data) |
+| `dtRowClick` | `DtRowClickEvent<T>` | row click, with the resolved row data |
 
-### Signals & escape hatch
+### Signals and the underlying Api
 
-- `instance(): Api<T> | undefined` — the live DataTables `Api` (undefined during SSR / before init).
-- `ready(): boolean` — true once created.
-- `selected(): readonly T[]` — current selection (Select extension).
+- `instance(): Api<T> | undefined` is the live DataTables `Api`, or `undefined` before the table is created (during SSR, for example).
+- `ready(): boolean` is true once the table exists.
+- `selected(): readonly T[]` is the current selection when the Select extension is loaded.
 
 ```ts
 table = viewChild.required<DtTableDirective<Row>>('t');
-this.table().instance()?.column(0).visible(false); // full DataTables Api
+this.table().instance()?.column(0).visible(false);
 ```
 
-## Styling adapters (secondary entry points)
+## Styling adapters
 
-Import one and add it to `provideDataTables(...)`:
+Each adapter is a secondary entry point. Import one and pass it to `provideDataTables(...)`.
 
 | Adapter | Import | Styling source |
-|---------|--------|----------------|
+| ------- | ------ | -------------- |
 | Default | `withDefaultStyling()` from `ngx-datatables-net/dt` | upstream `datatables.net-dt` |
 | Bootstrap 5 | `withBootstrap5()` from `ngx-datatables-net/bs5` | upstream `datatables.net-bs5` |
-| **Tailwind** | `withTailwind()` from `ngx-datatables-net/tailwind` | **authored by us** — DataTables has no official Tailwind theme |
-| **Material** | `withMaterial()` from `ngx-datatables-net/material` | **authored by us** — DataTables has no official Material theme |
+| Tailwind | `withTailwind()` from `ngx-datatables-net/tailwind` | written by us, since DataTables ships no Tailwind theme |
+| Material | `withMaterial()` from `ngx-datatables-net/material` | written by us, since DataTables ships no Material theme |
 
-For Tailwind/Material, also include the shipped stylesheet (the directive auto-adds the scope class):
+For Tailwind and Material, also include the shipped stylesheet (the directive adds the scope class for you):
 
 ```jsonc
 // angular.json styles
@@ -125,43 +136,51 @@ For Tailwind/Material, also include the shipped stylesheet (the directive auto-a
 
 ## Extensions
 
-All of DataTables' official extensions (Buttons, ColReorder, ColumnControl, AutoFill, FixedColumns,
+Every official DataTables extension works without any library code, because the directive forwards
+your full `Config`. That covers Buttons, ColReorder, ColumnControl, AutoFill, FixedColumns,
 FixedHeader, KeyTable, Responsive, RowGroup, RowReorder, Scroller, SearchBuilder, SearchPanes,
-Select, StateRestore, DateTime — and the commercial Editor) work **with zero library code** — the
-directive forwards your full `Config`. Import the extension package for its side-effects and
-configure via `dtOptions`:
+Select, StateRestore and DateTime, plus the commercial Editor. Import the extension package for its
+side effects and configure it through `dtOptions`:
 
 ```ts
 import 'datatables.net-select';
 options: Config = { select: { style: 'multi' } };
 ```
 
-> Interactive Angular controls (custom search inputs, etc.) should live **outside** the `<table>`:
-> DataTables rewrites header/footer DOM and would detach Angular event listeners. Call the `Api`
-> imperatively instead.
+One thing to watch: interactive Angular controls such as custom search inputs should live outside
+the `<table>`. DataTables rewrites the header and footer DOM, which detaches Angular event
+listeners. Call the `Api` from your own handlers instead.
 
 ## Security
 
-DataTables writes cells as `innerHTML` and **does not escape by default** — untrusted data is an XSS
-sink. This library addresses it:
+DataTables writes cells as `innerHTML` and does not escape by default, so untrusted data is an XSS
+sink. This library gives you two safeguards:
 
-- **`withSafeDefaults()`** escapes every column without an explicit `render` (overriding DataTables'
-  unsafe default). Strongly recommended.
-- **`injectSanitizedHtmlRenderer()` / `createSanitizedHtmlRenderer()`** opt a column into HTML that is
-  routed through Angular's `DomSanitizer` (safe tags kept; scripts/`onerror`/`onclick` stripped).
-- **Trusted Types:** because DataTables uses `innerHTML`, it is not compatible with a strict
-  `require-trusted-types-for 'script'` CSP without a permissive Trusted Types policy. See `SECURITY.md`.
+- `withSafeDefaults()` escapes every column that has no explicit `render`, which overrides the unsafe
+  default. Recommended for any table that shows user data.
+- `injectSanitizedHtmlRenderer()` and `createSanitizedHtmlRenderer()` let a column render HTML that
+  is first run through Angular's `DomSanitizer`, so safe tags survive and scripts, `onerror` and
+  `onclick` are stripped.
 
-## Versioning
+Note that because DataTables uses `innerHTML`, it is not compatible with a strict
+`require-trusted-types-for 'script'` Content Security Policy without a permissive Trusted Types
+policy. See [SECURITY.md](https://github.com/ascentspark/ngx-datatables-net/blob/main/docs/SECURITY.md).
 
-Three parallel release lines mirror the Angular major:
+## Documentation
 
-| Package major | Angular | npm dist-tag |
-|---------------|---------|--------------|
-| `22.x` | Angular 22 | `latest` |
-| `21.x` | Angular 21 | `ng21` |
-| `20.x` | Angular 20 | `ng20` |
+Live demo and full docs for every feature, styling adapter and extension:
+[ngx-datatables-net.ascentspark.com](https://ngx-datatables-net.ascentspark.com)
+
+## Versions
+
+One package major per Angular major. Install the one that matches your app.
+
+| Package | Angular | npm tag |
+| ------- | ------- | ------- |
+| `22.x`  | 22      | `latest` |
+| `21.x`  | 21      | `ng21`  |
+| `20.x`  | 20      | `ng20`  |
 
 ## License
 
-MIT © Ascentspark
+MIT, by [Ascentspark](https://ascentspark.com).

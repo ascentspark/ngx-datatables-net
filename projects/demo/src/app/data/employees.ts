@@ -101,7 +101,7 @@ export function makeEmployees(count: number): Employee[] {
   return rows;
 }
 
-/** 57 employees — enough rows to exercise paging, sorting, filtering and virtual scroll. */
+/** 57 employees, enough rows to exercise paging, sorting, filtering and virtual scroll. */
 export const EMPLOYEES: readonly Employee[] = Object.freeze(makeEmployees(57));
 
 /** Standard column definition for the employee dataset (object data source). */

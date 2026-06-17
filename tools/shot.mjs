@@ -1,7 +1,7 @@
 /**
  * Isolated screenshot helper.
  *
- * Launches its OWN headless Chromium instance (via project-local @playwright/test) — completely
+ * Launches its OWN headless Chromium instance (via project-local @playwright/test), completely
  * independent of any other running browser. Use for visual verification of the demo.
  *
  * Usage:
@@ -29,7 +29,7 @@ try {
     if (msg.type() === 'error') consoleErrors.push(msg.text());
   });
   page.on('pageerror', (err) => consoleErrors.push(`pageerror: ${err.message}`));
-  // Capture dialogs (alert/confirm/prompt) — a fired XSS alert() would surface here.
+  // Capture dialogs (alert/confirm/prompt), a fired XSS alert() would surface here.
   page.on('dialog', async (dialog) => {
     dialogs.push(`${dialog.type()}: ${dialog.message()}`);
     await dialog.dismiss().catch(() => {});

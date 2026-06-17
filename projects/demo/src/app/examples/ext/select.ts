@@ -14,8 +14,9 @@ type SelectItems = 'row' | 'column' | 'cell';
   template: `
     <demo-example
       title="Select extension"
-      description="Row, column or cell selection. Switch the selection granularity — each change rebuilds the options so the directive recreates the table with the new select config."
+      description="Row, column or cell selection. Switch the selection granularity, each change rebuilds the options so the directive recreates the table with the new select config."
       [sources]="sources"
+      docsUrl="https://datatables.net/extensions/select/"
     >
       <div class="demo-toolbar">
         <label

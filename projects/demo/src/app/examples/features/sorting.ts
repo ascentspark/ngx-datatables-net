@@ -15,7 +15,7 @@ import { ExampleCard, type ExampleSource } from '../../shared/example-card';
   template: `
     <demo-example
       title="Sorting"
-      description="Initial multi-column order (Office asc, then Salary desc). Salary uses orthogonal data — sorted as a number, displayed as currency. Shift-click headers to add secondary sorts."
+      description="Initial multi-column order (Office asc, then Salary desc). Salary uses orthogonal data, sorted as a number, displayed as currency. Shift-click headers to add secondary sorts."
       [sources]="sources"
     >
       <table

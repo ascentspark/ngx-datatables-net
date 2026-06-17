@@ -14,7 +14,7 @@ import { EMPLOYEES, EMPLOYEE_COLUMNS, type Employee } from '../../data/employees
   template: `
     <demo-example
       title="Basic table"
-      description="Bind dtData and dtColumns to the [dtTable] directive — paging, sorting and search are built in. Click a row to see the typed row-click output."
+      description="Bind dtData and dtColumns to the [dtTable] directive, paging, sorting and search are built in. Click a row to see the typed row-click output."
       [sources]="sources"
     >
       <table
@@ -68,7 +68,14 @@ export class BasicTable {
       label: 'component.ts',
       lang: 'ts',
       code: `import { Component, signal } from '@angular/core';
-import { DtTableDirective, type Api } from 'ngx-datatables-net';
+import { DtTableDirective, type Api, type ConfigColumns } from 'ngx-datatables-net';
+
+interface Employee {
+  id: number;
+  name: string;
+  position: string;
+  office: string;
+}
 
 @Component({
   selector: 'app-basic',
@@ -78,14 +85,36 @@ import { DtTableDirective, type Api } from 'ngx-datatables-net';
            [dtData]="data()" [dtColumns]="columns"
            (dtInit)="onInit($event)"
            (dtRowClick)="onRowClick($event.row)">
-      <thead><tr><th>ID</th><th>Name</th>…</tr></thead>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Position</th>
+          <th>Office</th>
+        </tr>
+      </thead>
     </table>\`,
 })
 export class BasicComponent {
-  columns = EMPLOYEE_COLUMNS;
-  data = signal(EMPLOYEES);
-  onInit(api: Api<Employee>) { /* escape hatch to the DataTables Api */ }
-  onRowClick(row: Employee) { /* typed row data */ }
+  columns: ConfigColumns[] = [
+    { data: 'id', title: 'ID' },
+    { data: 'name', title: 'Name' },
+    { data: 'position', title: 'Position' },
+    { data: 'office', title: 'Office' },
+  ];
+
+  data = signal<Employee[]>([
+    { id: 1, name: 'Ada Lovelace', position: 'Engineer', office: 'London' },
+    { id: 2, name: 'Linus Torvalds', position: 'Maintainer', office: 'Portland' },
+  ]);
+
+  onInit(api: Api<Employee>) {
+    // escape hatch: the full DataTables Api for imperative calls
+  }
+
+  onRowClick(row: Employee) {
+    // row is the typed Employee that was clicked
+  }
 }`,
     },
     {

@@ -28,7 +28,7 @@ const FIELDS: (keyof Employee)[] = [
   template: `
     <demo-example
       title="Server-side processing"
-      description="serverSide: true delegates paging/sorting/filtering to the backend. This demo's ajax is a function simulating a server over 500 rows — only the current page is ever sent to the browser."
+      description="serverSide: true delegates paging/sorting/filtering to the backend. This demo's ajax is a function simulating a server over 500 rows, only the current page is ever sent to the browser."
       [sources]="sources"
     >
       <table dtTable class="display" style="width:100%" [dtOptions]="options">
@@ -53,7 +53,7 @@ export class DataServerSide {
     serverSide: true,
     processing: true,
     columns: FIELDS.map((f) => ({ data: f, title: String(f) })),
-    // The ajax FUNCTION form — no jQuery. In a real app this would be an HttpClient call.
+    // The ajax FUNCTION form, no jQuery. In a real app this would be an HttpClient call.
     ajax: (request: any, callback: (res: any) => void) => {
       const { start = 0, length = 10, search, order } = request;
       const term = (search?.value ?? '').toLowerCase();
@@ -87,16 +87,38 @@ export class DataServerSide {
     {
       label: 'component.ts',
       lang: 'ts',
-      code: `options: Config = {
+      code: `import { inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { type Config } from 'ngx-datatables-net';
+
+interface ServerResponse {
+  recordsTotal: number;
+  recordsFiltered: number;
+  data: unknown[];
+}
+
+private http = inject(HttpClient);
+
+options: Config = {
   serverSide: true,
   processing: true,
-  columns: [{ data: 'id' }, { data: 'name' }, /* … */],
+  columns: [
+    { data: 'id', title: 'ID' },
+    { data: 'name', title: 'Name' },
+    { data: 'position', title: 'Position' },
+    { data: 'office', title: 'Office' },
+  ],
+  // DataTables puts paging, sort and search into \`request\`. Post it to your
+  // API and call back with the response. Only the current page is fetched.
   ajax: (request, callback) => {
-    // In a real app: this.http.post('/api/employees', request)
-    //   .subscribe(res => callback(res));
-    const { start, length, search, order } = request;
-    // …filter / sort / slice on the server…
-    callback({ draw: request.draw, recordsTotal, recordsFiltered, data });
+    this.http.post<ServerResponse>('/api/employees', request).subscribe((res) =>
+      callback({
+        draw: request.draw,
+        recordsTotal: res.recordsTotal,
+        recordsFiltered: res.recordsFiltered,
+        data: res.data,
+      }),
+    );
   },
 };`,
     },

@@ -18,8 +18,9 @@ const BIG_DATA: Employee[] = makeEmployees(10_000);
   template: `
     <demo-example
       title="Scroller (virtual scrolling)"
-      description="10,000 rows, but only the visible ones are rendered to the DOM. Scroll the table body — Scroller virtualises rows for smooth performance on large datasets."
+      description="10,000 rows, but only the visible ones are rendered to the DOM. Scroll the table body, Scroller virtualises rows for smooth performance on large datasets."
       [sources]="sources"
+      docsUrl="https://datatables.net/extensions/scroller/"
     >
       <table
         dtTable

@@ -42,7 +42,7 @@ Thumbs.db
 /playwright-report
 /dist/ngx-datatables-net/*.tgz
 
-# Local AI/assistant files — never publish (see CLAUDE.md authorship rules)
+# Local-only maintainer files (editor state, scratch notes) — not part of the package
 /CLAUDE.md
 CLAUDE.md
 .claude/

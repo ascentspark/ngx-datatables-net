@@ -13,14 +13,14 @@ export type DtRenderFn<T = unknown> = (
 ) => unknown;
 
 /**
- * SECURITY — why this exists.
+ * SECURITY, why this exists.
  *
  * DataTables writes cell content to the DOM directly (via jQuery), which **bypasses Angular's
  * template sanitization**. `DomSanitizer` only guards values bound through Angular templates, so
  * an HTML cell renderer fed user data is a live XSS sink. This helper funnels HTML output through
- * `DomSanitizer.sanitize(SecurityContext.HTML, …)` before it ever reaches DataTables.
+ * `DomSanitizer.sanitize(SecurityContext.HTML, value)` before it ever reaches DataTables.
  *
- * Use it ONLY for the `'display'` (and optionally `'filter'`) render types — sort/type values
+ * Use it ONLY for the `'display'` (and optionally `'filter'`) render types, sort/type values
  * should remain the raw underlying data so ordering and filtering stay correct.
  *
  * @example
@@ -54,13 +54,13 @@ const HTML_ENTITIES: Record<string, string> = {
 /**
  * A render function that ESCAPES HTML for display/filter, leaving raw data for sort/type.
  *
- * IMPORTANT: DataTables does **not** escape cell content by default — it writes data as innerHTML,
+ * IMPORTANT: DataTables does **not** escape cell content by default, it writes data as innerHTML,
  * which is an XSS sink for untrusted data. This renderer makes a column render as plain, escaped
  * text. It is what `withSafeDefaults()` applies to every column that has no explicit `render`.
  */
 export function escapeHtmlRenderer<T = unknown>(): DtRenderFn<T> {
   return (data, type) => {
-    // Only escape STRINGS for display/filter — strings are the only XSS carrier. Numbers, booleans,
+    // Only escape STRINGS for display/filter, strings are the only XSS carrier. Numbers, booleans,
     // null/undefined and objects are passed through unchanged so DataTables' `defaultContent`,
     // null-data columns and numeric formatting keep working (escaping them would print "[object
     // Object]" or clobber defaultContent).
