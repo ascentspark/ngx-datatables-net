@@ -56,6 +56,9 @@ GEMINI.md
 # Internal planning doc, not part of the published repo
 /docs/TASKS.md
 
+# Builder/working notes and research — local reference only, never published
+/internal_docs/
+
 # Local-only credentials, never commit
 /docs/github.md
 /docs/deployhq.md
