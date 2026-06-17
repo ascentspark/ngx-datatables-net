@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { runInInjectionContext, Injector } from '@angular/core';
+import { provideZonelessChangeDetection, runInInjectionContext, Injector } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { describe, it, expect, beforeEach } from 'vitest';
 import {
@@ -40,7 +40,9 @@ describe('createSanitizedHtmlRenderer', () => {
   let injector: Injector;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    // Explicit zoneless so this spec runs identically on the zoned-by-default Angular 20 line
+    // as it does on the zoneless-by-default 21/22 lines.
+    TestBed.configureTestingModule({ providers: [provideZonelessChangeDetection()] });
     injector = TestBed.inject(Injector);
   });
 
