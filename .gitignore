@@ -67,3 +67,4 @@ GEMINI.md
 # Local-only credentials, never commit
 /docs/github.md
 /docs/deployhq.md
+/docs/npm.md
