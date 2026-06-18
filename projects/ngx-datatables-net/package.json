@@ -1,6 +1,6 @@
 {
   "name": "ngx-datatables-net",
-  "version": "21.0.0",
+  "version": "21.1.0",
   "description": "Modern Angular wrapper for DataTables (datatables.net) using its non-jQuery API, standalone, signal-based, zoneless-ready. Supports Angular 20, 21 and 22.",
   "author": "Ascentspark",
   "license": "MIT",
