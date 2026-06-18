@@ -6,6 +6,7 @@
  */
 export * from './lib/datatables.types';
 export * from './lib/datatables.tokens';
+export * from './lib/dt-cell-template';
 export * from './lib/dt-events';
 export * from './lib/dt-render';
 export * from './lib/dt-table.directive';
