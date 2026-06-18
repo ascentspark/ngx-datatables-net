@@ -1,11 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  signal,
-  type TemplateRef,
-  viewChild,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, signal, type TemplateRef, viewChild } from '@angular/core';
 import { CurrencyPipe, TitleCasePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { DtTableDirective, type DtCellContext, type DtColumn } from 'ngx-datatables-net';
@@ -17,45 +10,15 @@ import { ExampleCard, type ExampleSource } from '../../shared/example-card';
  * instead of HTML strings. Pipes, `routerLink` and `(click)` handlers all work because the
  * template keeps the declaring component's injector and change detection. Sorting and search still
  * run on the column's raw `data`.
+ *
+ * The markup lives in `templates.html` (a standalone, commented template) rather than inline, so
+ * the `<ng-template>` blocks and their `let-` bindings are easy to read.
  */
 @Component({
   selector: 'demo-features-templates',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [DtTableDirective, ExampleCard, RouterLink, CurrencyPipe, TitleCasePipe],
-  template: `
-    <demo-example
-      title="Angular templates in cells"
-      description="Render cells with Angular <ng-template>s instead of HTML strings: pipes, routerLink and (click) handlers work with full Angular context. Sorting and global search still use the raw column data, not the rendered markup."
-      [sources]="sources"
-    >
-      @if (lastViewed(); as name) {
-        <p class="tpl-note">Clicked a cell button for: <strong>{{ name }}</strong></p>
-      }
-      <table dtTable class="display" style="width: 100%" [dtData]="data" [dtColumns]="columns()">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Office</th>
-            <th>Salary</th>
-            <th></th>
-          </tr>
-        </thead>
-      </table>
-    </demo-example>
-
-    <ng-template #nameTpl let-value let-row="row">
-      <a class="tpl-link" [routerLink]="['/basic']" [title]="row.position">{{ value }}</a>
-    </ng-template>
-    <ng-template #officeTpl let-value>
-      <span class="tpl-badge">{{ value | titlecase }}</span>
-    </ng-template>
-    <ng-template #salaryTpl let-value>
-      {{ value | currency: 'USD' : 'symbol' : '1.0-0' }}
-    </ng-template>
-    <ng-template #actionsTpl let-row="row">
-      <button type="button" class="tpl-btn" (click)="view(row)">View</button>
-    </ng-template>
-  `,
+  templateUrl: './templates.html',
   styles: `
     .tpl-note {
       margin: 0 0 1rem;
@@ -93,12 +56,13 @@ export class FeaturesTemplates {
   protected readonly data = EMPLOYEES;
   protected readonly lastViewed = signal<string | null>(null);
 
+  // Grab each <ng-template> from templates.html by its #reference.
   private readonly nameTpl = viewChild<TemplateRef<DtCellContext<Employee>>>('nameTpl');
   private readonly officeTpl = viewChild<TemplateRef<DtCellContext<Employee>>>('officeTpl');
   private readonly salaryTpl = viewChild<TemplateRef<DtCellContext<Employee>>>('salaryTpl');
   private readonly actionsTpl = viewChild<TemplateRef<DtCellContext<Employee>>>('actionsTpl');
 
-  /** Columns resolve once the templates are queryable (after view init). */
+  /** Columns resolve once the templates are queryable (just after the view is created). */
   protected readonly columns = computed<DtColumn<Employee>[] | undefined>(() => {
     const name = this.nameTpl();
     const office = this.officeTpl();
@@ -119,37 +83,76 @@ export class FeaturesTemplates {
     this.lastViewed.set(row.name);
   }
 
+  // The code panel below shows the same pattern as a clean, standalone HTML + TS pair you can
+  // copy into your own app. Keeping the template in its own .html file (templateUrl) is what makes
+  // the <ng-template>s and their let- bindings readable.
   protected readonly sources: ExampleSource[] = [
     {
-      label: 'templates.ts',
+      label: 'people.html',
+      lang: 'html',
+      code: `<!-- Each column (configured in the .ts) points at one of these <ng-template>s by name. -->
+<table dtTable [dtData]="people" [dtColumns]="columns()" class="display">
+  <thead>
+    <tr><th>Name</th><th>Salary</th><th></th></tr>
+  </thead>
+</table>
+
+<!--
+  Every cell template receives two values:
+    let-value      -> the cell's value (the column's \`data\` field)
+    let-row="row"  -> the whole row object, so you can read other fields like row.id
+-->
+
+<!-- Name: a link to this row's detail page, built from the row's id. -->
+<ng-template #nameTpl let-value let-row="row">
+  <a [routerLink]="['/users', row.id]">{{ value }}</a>
+</ng-template>
+
+<!-- Salary: the raw number formatted with Angular's currency pipe. -->
+<ng-template #salaryTpl let-value>
+  {{ value | currency }}
+</ng-template>
+
+<!-- Actions: a button that calls a component method with the whole row. -->
+<ng-template #actionsTpl let-row="row">
+  <button type="button" (click)="view(row)">View</button>
+</ng-template>`,
+    },
+    {
+      label: 'people.ts',
+      lang: 'ts',
       code: `import { Component, computed, signal, TemplateRef, viewChild } from '@angular/core';
-import { CurrencyPipe, TitleCasePipe } from '@angular/common';
+import { CurrencyPipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { DtTableDirective, type DtCellContext, type DtColumn } from 'ngx-datatables-net';
 
+interface User {
+  id: number;
+  name: string;
+  salary: number;
+}
+
 @Component({
   selector: 'app-people',
-  imports: [DtTableDirective, RouterLink, CurrencyPipe, TitleCasePipe],
-  template: \`
-    <table dtTable [dtData]="data" [dtColumns]="columns()" class="display"></table>
-
-    <ng-template #nameTpl let-value let-row="row">
-      <a [routerLink]="['/user', row.id]">{{ value }}</a>
-    </ng-template>
-    <ng-template #salaryTpl let-value>{{ value | currency }}</ng-template>
-    <ng-template #actionsTpl let-row="row">
-      <button type="button" (click)="view(row)">View</button>
-    </ng-template>
-  \`,
+  imports: [DtTableDirective, RouterLink, CurrencyPipe],
+  templateUrl: './people.html', // the standalone template above
 })
 export class PeopleComponent {
-  data = [/* rows */];
-  nameTpl = viewChild<TemplateRef<DtCellContext>>('nameTpl');
-  salaryTpl = viewChild<TemplateRef<DtCellContext>>('salaryTpl');
-  actionsTpl = viewChild<TemplateRef<DtCellContext>>('actionsTpl');
+  // Your rows.
+  people: User[] = [{ id: 1, name: 'Ada Lovelace', salary: 95000 }];
 
-  columns = computed<DtColumn[] | undefined>(() => {
-    const name = this.nameTpl(), salary = this.salaryTpl(), actions = this.actionsTpl();
+  // Look up each <ng-template> in the HTML by its #reference.
+  nameTpl = viewChild<TemplateRef<DtCellContext<User>>>('nameTpl');
+  salaryTpl = viewChild<TemplateRef<DtCellContext<User>>>('salaryTpl');
+  actionsTpl = viewChild<TemplateRef<DtCellContext<User>>>('actionsTpl');
+
+  // Link each column to a template with \`dtTemplate\`. The column still SORTS and SEARCHES on
+  // its raw \`data\`; the template only controls what is shown. (computed waits until the
+  // templates exist, just after the view is created.)
+  columns = computed<DtColumn<User>[] | undefined>(() => {
+    const name = this.nameTpl();
+    const salary = this.salaryTpl();
+    const actions = this.actionsTpl();
     if (!name || !salary || !actions) return undefined;
     return [
       { data: 'name', title: 'Name', dtTemplate: name },
@@ -158,7 +161,10 @@ export class PeopleComponent {
     ];
   });
 
-  view(row: any) { /* ... */ }
+  view(row: User) {
+    // open a dialog, navigate, mutate state, etc.
+    console.log('view', row.id);
+  }
 }`,
     },
   ];

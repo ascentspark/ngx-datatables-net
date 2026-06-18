@@ -1,0 +1,57 @@
+<demo-example
+  title="Angular templates in cells"
+  description="Render cells with Angular <ng-template>s instead of HTML strings: pipes, routerLink and (click) handlers work with full Angular context. Sorting and global search still use the raw column data, not the rendered markup."
+  [sources]="sources"
+>
+  @if (lastViewed(); as name) {
+    <p class="tpl-note">Clicked a cell button for: <strong>{{ name }}</strong></p>
+  }
+
+  <!--
+    The table. The columns are configured in templates.ts; each column there points at one of the
+    <ng-template>s below by name (via `dtTemplate`).
+  -->
+  <table dtTable class="display" style="width: 100%" [dtData]="data" [dtColumns]="columns()">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Office</th>
+        <th>Salary</th>
+        <th></th>
+      </tr>
+    </thead>
+  </table>
+</demo-example>
+
+<!--
+  Cell templates.
+
+  Each <ng-template> is a named block (the `#name` is how the component refers to it). A column in
+  templates.ts renders its cell with one of these by setting `dtTemplate: nameTpl`.
+
+  Every template is handed the same two values:
+    let-value       -> the cell's value, i.e. the column's `data` field (the name, office, salary)
+    let-row="row"   -> the WHOLE row object, so you can read any other field, e.g. row.id / row.position
+
+  Sorting and search still use the column's raw `data`; the template only changes what is displayed.
+-->
+
+<!-- Name cell: a routerLink. `row` gives access to the rest of the row (here, row.position for the tooltip). -->
+<ng-template #nameTpl let-value let-row="row">
+  <a class="tpl-link" [routerLink]="['/basic']" [title]="row.position">{{ value }}</a>
+</ng-template>
+
+<!-- Office cell: the value run through Angular's titlecase pipe, shown in a badge. -->
+<ng-template #officeTpl let-value>
+  <span class="tpl-badge">{{ value | titlecase }}</span>
+</ng-template>
+
+<!-- Salary cell: formatted with the currency pipe (the column still sorts on the raw number). -->
+<ng-template #salaryTpl let-value>
+  {{ value | currency: 'USD' : 'symbol' : '1.0-0' }}
+</ng-template>
+
+<!-- Actions cell: a button wired to a component method, passing the whole row. -->
+<ng-template #actionsTpl let-row="row">
+  <button type="button" class="tpl-btn" (click)="view(row)">View</button>
+</ng-template>
