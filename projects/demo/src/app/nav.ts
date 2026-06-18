@@ -30,9 +30,11 @@ export const NAV: NavGroup[] = [
     items: [
       { path: 'features/columns', label: 'Columns & visibility' },
       { path: 'features/renderers', label: 'Renderers & XSS safety' },
+      { path: 'features/templates', label: 'Angular cell templates' },
       { path: 'features/pagination', label: 'Pagination' },
       { path: 'features/sorting', label: 'Sorting' },
       { path: 'features/filtering', label: 'Filtering' },
+      { path: 'features/range-filter', label: 'Custom range filter' },
       { path: 'features/selection', label: 'Selection (two-way)' },
       { path: 'features/reactive-options', label: 'Reactive options' },
       { path: 'features/i18n', label: 'i18n & accessibility' },

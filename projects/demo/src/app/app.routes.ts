@@ -46,6 +46,11 @@ export const routes: Routes = [
     title: 'Renderers & XSS safety, ngx-datatables-net',
   },
   {
+    path: 'features/templates',
+    loadComponent: () => import('./examples/features/templates').then((m) => m.FeaturesTemplates),
+    title: 'Angular cell templates, ngx-datatables-net',
+  },
+  {
     path: 'features/pagination',
     loadComponent: () => import('./examples/features/pagination').then((m) => m.FeaturesPagination),
     title: 'Pagination, ngx-datatables-net',
@@ -59,6 +64,11 @@ export const routes: Routes = [
     path: 'features/filtering',
     loadComponent: () => import('./examples/features/filtering').then((m) => m.FeaturesFiltering),
     title: 'Filtering, ngx-datatables-net',
+  },
+  {
+    path: 'features/range-filter',
+    loadComponent: () => import('./examples/features/range-filter').then((m) => m.FeaturesRangeFilter),
+    title: 'Custom range filter, ngx-datatables-net',
   },
   {
     path: 'features/selection',
