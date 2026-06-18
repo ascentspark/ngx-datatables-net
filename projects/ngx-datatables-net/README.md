@@ -1,5 +1,10 @@
 # ngx-datatables-net
 
+[![npm version](https://img.shields.io/npm/v/ngx-datatables-net.svg)](https://www.npmjs.com/package/ngx-datatables-net)
+[![downloads](https://img.shields.io/npm/dm/ngx-datatables-net.svg)](https://www.npmjs.com/package/ngx-datatables-net)
+[![Angular](https://img.shields.io/badge/Angular-20%20%7C%2021%20%7C%2022-dd0031.svg)](https://angular.dev)
+[![license](https://img.shields.io/npm/l/ngx-datatables-net.svg)](https://github.com/ascentspark/ngx-datatables-net/blob/main/LICENSE)
+
 [DataTables](https://datatables.net) is a widely used JavaScript library that turns a plain HTML
 table into an interactive one: sorting, searching, pagination, and a large set of extensions for
 things like export buttons, row selection, fixed headers and responsive layouts.
@@ -10,6 +15,8 @@ back as signals. It supports Angular 20, 21 and 22.
 
 It is the successor to the archived `angular-datatables`, rebuilt for standalone components, signals
 and zoneless change detection, with escaped output by default.
+
+> **Coming from `angular-datatables`?** See the [migration guide](https://github.com/ascentspark/ngx-datatables-net/blob/main/docs/MIGRATION.md) for the move from `DataTablesModule` / `dtTrigger` to the signal-driven directive.
 
 A note on jQuery: DataTables still uses jQuery internally, so it sits in your dependency tree as a
 transitive dependency of `datatables.net`. This library never imports or calls jQuery itself. You

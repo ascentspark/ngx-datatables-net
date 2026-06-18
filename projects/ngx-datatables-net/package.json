@@ -14,15 +14,24 @@
   },
   "keywords": [
     "angular",
+    "angular-datatables",
     "datatables",
     "datatables.net",
+    "datatables-angular",
     "table",
+    "angular-table",
     "grid",
+    "data-grid",
+    "angular-data-grid",
     "datagrid",
+    "angular-grid",
     "signals",
     "standalone",
     "zoneless",
-    "ngx"
+    "ngx",
+    "angular-20",
+    "angular-21",
+    "angular-22"
   ],
   "peerDependencies": {
     "@angular/common": "^22.0.0",
