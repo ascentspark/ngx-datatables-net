@@ -8,11 +8,14 @@ decisions, so you know what you are adding to your app and how to extend it.
 [DataTables](https://datatables.net) is one of the most capable table libraries on the web, but it
 does not ship an Angular integration of its own. The long-standing community option,
 [`l-lin/angular-datatables`](https://github.com/l-lin/angular-datatables), was archived in early
-2025 and never moved past Angular 19. It was built on NgModules, jQuery, and Zone.js, none of which
-fit current Angular, and there is no actively maintained fork that does.
+2025 at Angular 19. A community continuation keeps that codebase building against newer Angular, but
+it carries the original design forward: NgModules, the `dtTrigger` subject, and jQuery and Zone.js
+as required peer dependencies in your app.
 
-`ngx-datatables-net` fills that gap: an Angular wrapper for DataTables built with standalone APIs and
-signals, ready for zoneless change detection, and kept current with Angular.
+`ngx-datatables-net` takes the other path: a ground-up build for modern Angular using standalone
+APIs and signals, ready for zoneless change detection, and the non-jQuery DataTables API. The result
+is that neither jQuery nor Zone.js is part of your own code, and data updates flow through signals
+instead of a manual trigger.
 
 ## How it works
 
