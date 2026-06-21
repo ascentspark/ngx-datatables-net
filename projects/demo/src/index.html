@@ -146,7 +146,9 @@
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
 
-      gtag('config', 'G-ELHM3MC7EZ');
+      // send_page_view is off: the Angular router sends an explicit page_view on every
+      // NavigationEnd (including the first load) from SeoService, so SPA route changes are tracked.
+      gtag('config', 'G-ELHM3MC7EZ', { send_page_view: false });
     </script>
   </head>
   <body>

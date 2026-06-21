@@ -1,8 +1,10 @@
-import { DOCUMENT } from '@angular/common';
-import { inject, Injectable } from '@angular/core';
+import { DOCUMENT, isPlatformBrowser } from '@angular/common';
+import { inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs';
+
+declare function gtag(...args: unknown[]): void;
 
 const ORIGIN = 'https://ngx-datatables-net.ascentspark.com';
 const DEFAULT_DESCRIPTION =
@@ -22,6 +24,7 @@ export class SeoService {
   private readonly title = inject(Title);
   private readonly meta = inject(Meta);
   private readonly doc = inject(DOCUMENT);
+  private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
 
   init(): void {
     this.router.events
@@ -42,6 +45,15 @@ export class SeoService {
         this.meta.updateTag({ name: 'twitter:title', content: pageTitle });
         this.meta.updateTag({ name: 'twitter:description', content: description });
         this.setCanonical(url);
+
+        // Explicit GA4 page_view for this SPA navigation (auto page_view is disabled in index.html).
+        if (this.isBrowser && typeof gtag === 'function') {
+          gtag('event', 'page_view', {
+            page_title: pageTitle,
+            page_location: url,
+            page_path: e.urlAfterRedirects,
+          });
+        }
       });
   }
 
