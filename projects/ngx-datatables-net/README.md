@@ -7,7 +7,7 @@ An Angular wrapper for [DataTables.net](https://datatables.net), by
 
 <a href="https://ascentspark.com" target="_blank" rel="noopener"><img src="https://cdn.ascentspark.com/assets/images/asc-logo-full.svg" alt="Ascentspark" height="40"></a>
 
-### Signals, standalone components and zoneless change detection, without using jQuery
+### Signals, standalone components and zoneless change detection, without writing jQuery
 
 [![npm version](https://img.shields.io/npm/v/ngx-datatables-net.svg?color=dd0031)](https://www.npmjs.com/package/ngx-datatables-net)
 [![downloads](https://img.shields.io/npm/dm/ngx-datatables-net.svg)](https://www.npmjs.com/package/ngx-datatables-net)
@@ -27,10 +27,15 @@ search, pagination, and a large set of extensions. `ngx-datatables-net` lets you
 Angular without writing any jQuery. Put a directive on a `<table>`, bind your options and data as
 signal inputs, and read events and state back as signals. It supports Angular 20, 21 and 22.
 
-> **🅰️ Built the modern Angular way, not a jQuery wrapper.** Signals, standalone components and
-> zoneless change detection throughout, on top of DataTables' **non-jQuery** API. The original
-> `angular-datatables` was archived in 2025 and never moved past `NgModule` + `Zone.js` + `dtTrigger`.
-> This is a clean-sheet rebuild for Angular 20 to 22, without using jQuery in your code.
+DataTables itself still uses jQuery internally, so jQuery ships in your bundle as a transitive
+dependency of `datatables.net`. This library never imports or calls jQuery, never lists it as a peer
+dependency, and never asks you to write it: you write plain Angular.
+
+> **🅰️ Built the modern Angular way.** Signals, standalone components and zoneless change detection,
+> on top of DataTables' **non-jQuery** constructor API. Your only peer dependencies are Angular and
+> DataTables: no `zone.js`, `rxjs` or `jquery` required of your app. The original `angular-datatables`
+> was archived in 2025 and never moved past `NgModule` + `Zone.js` + `dtTrigger`; this is a clean-sheet
+> rebuild for Angular 20 to 22.
 
 > ## 🆓 Built-in inline editing, an alternative to the paid version
 >
