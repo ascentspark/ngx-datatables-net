@@ -1,5 +1,6 @@
 import type { TemplateRef } from '@angular/core';
 import type { ConfigColumns } from 'datatables.net';
+import type { DtEditorConfig } from './dt-editable.types';
 
 /**
  * Context handed to a cell's Angular template. In the `<ng-template>` these are the `let-` vars:
@@ -37,7 +38,11 @@ export interface DtCellContext<T = unknown> {
  *   { data: null, title: '', orderable: false, dtTemplate: this.actionsTpl },
  * ];
  * ```
+ *
+ * A column may also carry an `editor` (`DtEditorConfig`) to opt into edit-in-place via the
+ * companion `[dtEditable]` directive. A column with no `editor` is read-only.
  */
 export type DtColumn<T = unknown> = ConfigColumns & {
   dtTemplate?: TemplateRef<DtCellContext<T>>;
+  editor?: DtEditorConfig<T>;
 };

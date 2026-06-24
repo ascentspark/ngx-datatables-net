@@ -1,26 +1,53 @@
+<div align="center">
+
 # ngx-datatables-net
 
-[![npm version](https://img.shields.io/npm/v/ngx-datatables-net.svg)](https://www.npmjs.com/package/ngx-datatables-net)
+An Angular wrapper for [DataTables.net](https://datatables.net), by
+<a href="https://ascentspark.com" target="_blank" rel="noopener">Ascentspark</a>
+
+<a href="https://ascentspark.com" target="_blank" rel="noopener"><img src="https://cdn.ascentspark.com/assets/images/asc-logo-full.svg" alt="Ascentspark" height="40"></a>
+
+### Signals, standalone components and zoneless change detection, without writing jQuery
+
+[![npm version](https://img.shields.io/npm/v/ngx-datatables-net.svg?color=dd0031)](https://www.npmjs.com/package/ngx-datatables-net)
 [![downloads](https://img.shields.io/npm/dm/ngx-datatables-net.svg)](https://www.npmjs.com/package/ngx-datatables-net)
-[![Angular](https://img.shields.io/badge/Angular-20%20%7C%2021%20%7C%2022-dd0031.svg)](https://angular.dev)
-[![license](https://img.shields.io/npm/l/ngx-datatables-net.svg)](https://github.com/ascentspark/ngx-datatables-net/blob/main/LICENSE)
+[![Angular 20 · 21 · 22](https://img.shields.io/badge/Angular-20%20%C2%B7%2021%20%C2%B7%2022-dd0031.svg)](https://angular.dev)
+[![license MIT](https://img.shields.io/npm/l/ngx-datatables-net.svg?color=3b82f6)](https://github.com/ascentspark/ngx-datatables-net/blob/main/LICENSE)
 
-[DataTables](https://datatables.net) is a widely used JavaScript library that turns a plain HTML
-table into an interactive one: sorting, searching, pagination, and a large set of extensions for
-things like export buttons, row selection, fixed headers and responsive layouts.
+**[🚀 Live demo](https://ngx-datatables-net.ascentspark.com)** &nbsp;·&nbsp;
+**[✏️ Edit in place](https://github.com/ascentspark/ngx-datatables-net/blob/main/docs/EDIT-IN-PLACE.md)** [![new](https://img.shields.io/badge/new-20.2.0-dd0031?style=flat-square)](https://github.com/ascentspark/ngx-datatables-net/blob/main/docs/EDIT-IN-PLACE.md) &nbsp;·&nbsp;
+**[📝 Changelog](https://github.com/ascentspark/ngx-datatables-net/blob/main/CHANGELOG.md)**
 
-`ngx-datatables-net` lets you use DataTables from Angular without writing any jQuery. You put a
-directive on a `<table>`, bind your options and data as Angular inputs, and read events and state
-back as signals. It supports Angular 20, 21 and 22.
+</div>
 
-It is the successor to the archived `angular-datatables`, rebuilt for standalone components, signals
-and zoneless change detection, with escaped output by default.
+---
+
+[DataTables](https://datatables.net) turns a plain HTML table into an interactive one: sorting,
+search, pagination, and a large set of extensions. `ngx-datatables-net` lets you drive it from
+Angular without writing any jQuery. Put a directive on a `<table>`, bind your options and data as
+signal inputs, and read events and state back as signals. It supports Angular 20, 21 and 22.
+
+DataTables itself still uses jQuery internally, so jQuery ships in your bundle as a transitive
+dependency of `datatables.net`. This library never imports or calls jQuery, never lists it as a peer
+dependency, and never asks you to write it: you write plain Angular.
+
+> **🅰️ Built the modern Angular way.** Signals, standalone components and zoneless change detection,
+> on top of DataTables' **non-jQuery** constructor API. Your only peer dependencies are Angular and
+> DataTables: no `zone.js`, `rxjs` or `jquery` required of your app. The original `angular-datatables`
+> was archived in 2025 and never moved past `NgModule` + `Zone.js` + `dtTrigger`; this is a clean-sheet
+> rebuild for Angular 20 to 22.
+
+> ## 🆓 Built-in inline editing, an alternative to the paid version
+>
+> DataTables' own inline editing ships only in **[Editor](https://editor.datatables.net/), a
+> commercial paid extension**. The `[dtEditable]` directive gives you **double-click edit-in-place
+> for free** (MIT): text, textarea, number, date, checkbox, select, multiselect and **custom**
+> editors, with validation, keyboard navigation and optional pessimistic async saving.
+> **→ [Live demo](https://ngx-datatables-net.ascentspark.com/features/edit-in-place)** ·
+> **[Guide](https://github.com/ascentspark/ngx-datatables-net/blob/main/docs/EDIT-IN-PLACE.md)** ·
+> see [`[dtEditable]`](#edit-in-place-dteditable-free-no-editor-licence) below.
 
 > **Coming from `angular-datatables`?** See the [migration guide](https://github.com/ascentspark/ngx-datatables-net/blob/main/docs/MIGRATION.md) for the move from `DataTablesModule` / `dtTrigger` to the signal-driven directive.
-
-A note on jQuery: DataTables still uses jQuery internally, so it sits in your dependency tree as a
-transitive dependency of `datatables.net`. This library never imports or calls jQuery itself. You
-write plain Angular.
 
 ## Install
 
@@ -121,6 +148,46 @@ table = viewChild.required<DtTableDirective<Row>>('t');
 this.table().instance()?.column(0).visible(false);
 ```
 
+## Edit in place: `[dtEditable]` (free, no Editor licence)
+
+Inline editing in DataTables is otherwise a paid feature of the commercial
+[Editor](https://editor.datatables.net/) extension. `[dtEditable]` gives you the same
+double-click-to-edit experience **for free** (MIT). Add it to the same `<table>` and give a column an
+`editor`; a column with no `editor` is read-only. Enter (or click-away) commits, Escape cancels, Tab
+moves to the next editable cell.
+
+```ts
+import { DtTableDirective, DtEditableDirective, type DtColumn } from 'ngx-datatables-net';
+
+@Component({
+  imports: [DtTableDirective, DtEditableDirective],
+  template: `
+    <table dtTable dtEditable class="display" style="width:100%"
+           [dtData]="people()" [dtColumns]="columns" [dtSave]="save"
+           (dtCellEdit)="onSaved($event)">
+      <thead><tr><th>Name</th><th>Office</th></tr></thead>
+    </table>`,
+})
+export class People {
+  columns: DtColumn<Person>[] = [
+    { data: 'name', title: 'Name', editor: { type: 'text', validate: v => String(v).trim() ? null : 'Required' } },
+    { data: 'office', title: 'Office', editor: { type: 'select', options: OFFICES } },
+  ];
+}
+```
+
+- **Editors:** `text`, `textarea`, `number`, `date`, `checkbox`, `select`, `multiselect`, and a
+  `custom` editor backed by your own `<ng-template>`.
+- **Saving:** bind `[dtSave]` to persist before the cell is written. Return `void` for a synchronous
+  commit, or a `Promise` / `Observable` for a pessimistic save. The cell shows a busy state and, on
+  failure, stays open with an inline error for retry.
+- **Events:** `dtCellEditStart`, `dtCellEdit`, `dtCellEditCancel`, `dtCellEditError`.
+- Per-cell `validate` and `disabled`, keyboard navigation, focus return and ARIA labelling are built
+  in; values are written through the DataTables `Api`, and no edit path introduces an HTML sink.
+
+Full guide: [Edit in place](https://github.com/ascentspark/ngx-datatables-net/blob/main/docs/EDIT-IN-PLACE.md)
+· [live demo](https://ngx-datatables-net.ascentspark.com/features/edit-in-place).
+
 ## Styling adapters
 
 Each adapter is a secondary entry point. Import one and pass it to `provideDataTables(...)`.
@@ -187,6 +254,15 @@ One package major per Angular major. Install the one that matches your app.
 | `22.x`  | 22      | `latest` |
 | `21.x`  | 21      | `ng21`  |
 | `20.x`  | 20      | `ng20`  |
+
+## Help keep it healthy
+
+We genuinely try to keep this library current, bug-free and secure, and honestly the best way to get
+there is together. If something breaks, please
+[open an issue](https://github.com/ascentspark/ngx-datatables-net/issues); if you can fix a bug or
+add something useful, pull requests are very welcome, big or small. An open-source library stays
+dependable only when people use it, tell us what's broken, and pitch in now and then, so thank you in
+advance for anything you send our way. 💛
 
 ## License
 
