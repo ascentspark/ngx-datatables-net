@@ -255,6 +255,19 @@ One package major per Angular major. Install the one that matches your app.
 | `21.x`  | 21      | `ng21`  |
 | `20.x`  | 20      | `ng20`  |
 
+## Roadmap
+
+Work in progress for upcoming releases, all built on **free** DataTables (no commercial extensions
+required). No firm dates yet, and pull requests are very welcome:
+
+- **Master / detail rows**: expandable detail rows and nested sub-grids, driven by Angular templates.
+- **Row grouping**: group headers with expand/collapse and aggregation helpers, on top of RowGroup.
+- **Clipboard**: Excel-style copy (and paste) for the whole table and for cell ranges.
+- **Pivoting**: summarise rows into a cross-tab / pivot view (exploratory).
+
+Following the same approach as edit-in-place: modern Angular (signals, standalone, zoneless), and
+free alternatives to features that are otherwise paid in other grids.
+
 ## Help keep it healthy
 
 We genuinely try to keep this library current, bug-free and secure, and honestly the best way to get
