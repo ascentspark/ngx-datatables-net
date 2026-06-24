@@ -164,15 +164,17 @@ One package major per Angular major. Install the one that matches your app.
 | `21.x`  | 21      | `ng21`  |
 | `20.x`  | 20      | `ng20`  |
 
-## 🚧 Roadmap
+## 🗺️ Roadmap
 
-Work in progress for upcoming releases, all built on **free** DataTables (no commercial extensions
-required). No firm dates yet, and pull requests are very welcome:
+> 🚧 **Work in progress for upcoming releases.** All built on **free** DataTables (no commercial
+> extensions required), no firm dates yet, and pull requests are very welcome.
 
-- **Master / detail rows**: expandable detail rows and nested sub-grids, driven by Angular templates.
-- **Row grouping**: group headers with expand/collapse and aggregation helpers, on top of RowGroup.
-- **Clipboard**: Excel-style copy (and paste) for the whole table and for cell ranges.
-- **Cell selection**: select individual cells and rectangular ranges, building on the Select extension.
+| | Feature | What's coming |
+| :-: | --- | --- |
+| 🗂️ | **Master / detail rows** | Expandable detail rows and nested sub-grids, driven by Angular templates |
+| 🗃️ | **Row grouping** | Group headers with expand / collapse and aggregation helpers, on top of RowGroup |
+| 📋 | **Clipboard** | Excel-style copy and paste, for the whole table and for cell ranges |
+| 🔲 | **Cell selection** | Select individual cells and rectangular ranges, building on the Select extension |
 
 Following the same approach as edit-in-place: modern Angular (signals, standalone, zoneless), and
 free alternatives to features that are otherwise paid in other grids.
