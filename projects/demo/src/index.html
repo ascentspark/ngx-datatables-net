@@ -8,11 +8,11 @@
     <title>ngx-datatables-net | Modern Angular wrapper for DataTables.net</title>
     <meta
       name="description"
-      content="Use DataTables.net in Angular 20, 21 and 22: a directive driven by signals, zoneless-ready, with sorting, search, pagination and every DataTables extension. No jQuery in your code."
+      content="Use DataTables.net in Angular 20, 21 and 22: a signal-driven, zoneless-ready directive with sorting, search, pagination, free inline cell editing and every DataTables extension. No jQuery in your code."
     />
     <meta
       name="keywords"
-      content="angular datatables, ngx-datatables-net, datatables.net angular, angular table, angular data grid, datatables angular wrapper, angular 22 table"
+      content="angular datatables, ngx-datatables-net, datatables.net angular, angular table, angular data grid, datatables angular wrapper, angular 22 table, angular inline editing, editable table, datatables editor alternative, edit in place"
     />
     <meta name="author" content="Ascentspark" />
     <meta name="theme-color" content="#FF4806" />
@@ -25,7 +25,7 @@
     <meta property="og:title" content="ngx-datatables-net | Modern Angular wrapper for DataTables.net" />
     <meta
       property="og:description"
-      content="Use DataTables.net in Angular 20, 21 and 22: a signal-driven directive with sorting, search, pagination and every DataTables extension. No jQuery in your code."
+      content="Use DataTables.net in Angular 20, 21 and 22: a signal-driven directive with sorting, search, pagination, free inline cell editing and every DataTables extension. No jQuery in your code."
     />
     <meta property="og:url" content="https://ngx-datatables-net.ascentspark.com/" />
     <meta property="og:image" content="https://ngx-datatables-net.ascentspark.com/og-image.png" />
@@ -50,13 +50,13 @@
           {
             "@type": "SoftwareSourceCode",
             "name": "ngx-datatables-net",
-            "description": "Modern Angular wrapper for the DataTables.net library, using its non-jQuery API. Standalone, signal-based and zoneless-ready. Supports Angular 20, 21 and 22.",
+            "description": "Modern Angular wrapper for the DataTables.net library, using its non-jQuery API. Standalone, signal-based and zoneless-ready. Includes free double-click edit-in-place (the [dtEditable] directive) as an alternative to the paid DataTables Editor. Supports Angular 20, 21 and 22.",
             "url": "https://ngx-datatables-net.ascentspark.com/",
             "codeRepository": "https://github.com/ascentspark/ngx-datatables-net",
             "programmingLanguage": "TypeScript",
             "runtimePlatform": "Angular",
             "license": "https://opensource.org/licenses/MIT",
-            "keywords": "angular, datatables, datatables.net, table, data grid, signals, standalone, zoneless",
+            "keywords": "angular, datatables, datatables.net, table, data grid, signals, standalone, zoneless, inline editing, editable, edit in place, datatables editor alternative",
             "author": {
               "@type": "Organization",
               "name": "Ascentspark",
@@ -123,6 +123,14 @@
                 "acceptedAnswer": {
                   "@type": "Answer",
                   "text": "All of them, with no library-specific code: Buttons, Select, ColumnControl, Responsive, FixedHeader, FixedColumns, Scroller, RowGroup, RowReorder, ColReorder, SearchPanes, SearchBuilder, KeyTable, AutoFill, DateTime and StateRestore. Import the extension package and configure it through dtOptions. The commercial Editor is compatible via the exposed Api."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Is there a free alternative to DataTables Editor for inline editing in Angular?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Yes. ngx-datatables-net includes the [dtEditable] directive (added in 22.2.0) for free, MIT-licensed double-click edit-in-place: text, textarea, number, date, checkbox, select, multiselect and custom editors, with validation, keyboard navigation and optional pessimistic async saving via [dtSave]. DataTables' own inline editing ships only in the paid commercial Editor extension; [dtEditable] gives the same experience without a licence."
                 }
               },
               {

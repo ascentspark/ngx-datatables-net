@@ -9,10 +9,17 @@ to a native `<table>`, bind `dtData` and `dtColumns` as Angular inputs, and read
 back as signals. It is standalone, zoneless-ready and SSR-safe, and ships four styling adapters:
 the DataTables default (dt), Bootstrap 5, Tailwind, and Material.
 
+It also provides free double-click edit-in-place via the `[dtEditable]` directive: inline cell
+editing (text, textarea, number, date, checkbox, select, multiselect and custom editors) with
+validation and optional async saving. This is a free, MIT-licensed alternative to inline editing
+from DataTables Editor, which is a paid commercial extension.
+
 ## Documentation
 
 - [Getting started](https://ngx-datatables-net.ascentspark.com/): install, configure and a copy-paste first table.
 - [Live examples](https://ngx-datatables-net.ascentspark.com/): data sourcing, features, styling adapters, and every DataTables extension.
+- [Edit in place demo](https://ngx-datatables-net.ascentspark.com/features/edit-in-place): double-click inline editing for every editor type.
+- [Edit in place guide](https://github.com/ascentspark/ngx-datatables-net/blob/main/docs/EDIT-IN-PLACE.md): the `[dtEditable]` directive in full.
 - [GitHub repository](https://github.com/ascentspark/ngx-datatables-net): source, README, architecture and security notes.
 - [DataTables.net](https://datatables.net): the underlying table library this package wraps.
 
@@ -22,6 +29,7 @@ the DataTables default (dt), Bootstrap 5, Tailwind, and Material.
 - Selector: attribute directive `[dtTable]` on a `<table>` element.
 - Inputs: `dtOptions` (DataTables Config), `dtData` (row array), `dtColumns` (column definitions).
 - Outputs: `dtInit`, `dtDraw`, `dtPage`, `dtXhr`, `dtSelect`, `dtDeselect`, `dtRowClick`.
+- Edit in place: add the `[dtEditable]` directive and give a column an `editor` (`type` of text, textarea, number, date, checkbox, select, multiselect or custom). Bind `[dtSave]` for sync/Promise/Observable saving; outputs `dtCellEditStart`, `dtCellEdit`, `dtCellEditCancel`, `dtCellEditError`. Free and MIT, no DataTables Editor licence needed. Added in 22.2.0.
 - Reload data by assigning a new array to the `dtData` signal; no manual redraw trigger.
 - Escaped output by default via `withSafeDefaults()`; opt into HTML with a DomSanitizer-backed renderer.
 - One package major per Angular major: `22.x` (latest), `21.x` (ng21), `20.x` (ng20).
@@ -35,5 +43,6 @@ the DataTables default (dt), Bootstrap 5, Tailwind, and Material.
 - NgModules or Zone.js? Neither. Standalone directive, zoneless-ready (and works in zoned apps too).
 - XSS safety? withSafeDefaults() escapes columns without a renderer; opt into HTML via the DomSanitizer-backed renderer.
 - Ajax / server-side? Yes, via the ajax option (string, object, or function) and serverSide: true.
-- Extensions? All official DataTables extensions work through pass-through dtOptions; Editor (commercial) via the exposed Api.
+- Extensions? All official DataTables extensions work through pass-through dtOptions; the commercial Editor extension is also compatible via the exposed Api.
+- Free inline editing / alternative to the paid DataTables Editor? Yes. The `[dtEditable]` directive gives free, MIT-licensed double-click edit-in-place (text, textarea, number, date, checkbox, select, multiselect and custom editors, validation and async saving) without the commercial Editor licence. Added in 22.2.0.
 - SSR? Yes, the table initialises in the browser only (afterNextRender).

@@ -52,6 +52,38 @@
   text-underline-offset: 2px;
 }
 
+/* "What's new" callout */
+.gs-whatsnew {
+  margin: 1.4rem 0 0;
+  padding: 0.7rem 1rem;
+  background: var(--demo-tint);
+  border: 1px solid var(--asc-ring-orange);
+  border-radius: var(--radius-md);
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: var(--demo-text);
+  max-width: 70ch;
+}
+
+.gs-whatsnew__tag {
+  display: inline-block;
+  margin-right: 0.5rem;
+  padding: 0.1rem 0.5rem;
+  border-radius: var(--radius-full);
+  background: var(--asc-spark-orange);
+  color: var(--asc-pure-white);
+  font-size: 0.72rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.gs-whatsnew a {
+  color: var(--asc-spark-orange);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  font-weight: 500;
+}
+
 /* ---- Steps ---- */
 .gs-h2 {
   margin: 0 0 1rem;

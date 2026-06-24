@@ -31,6 +31,7 @@ export const NAV: NavGroup[] = [
       { path: 'features/columns', label: 'Columns & visibility' },
       { path: 'features/renderers', label: 'Renderers & XSS safety' },
       { path: 'features/templates', label: 'Angular cell templates' },
+      { path: 'features/edit-in-place', label: 'Edit in place' },
       { path: 'features/pagination', label: 'Pagination' },
       { path: 'features/sorting', label: 'Sorting' },
       { path: 'features/filtering', label: 'Filtering' },

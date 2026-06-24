@@ -41,6 +41,16 @@
     <changefreq>monthly</changefreq>
   </url>
   <url>
+    <loc>https://ngx-datatables-net.ascentspark.com/features/templates</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://ngx-datatables-net.ascentspark.com/features/edit-in-place</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
     <loc>https://ngx-datatables-net.ascentspark.com/features/pagination</loc>
     <priority>0.6</priority>
     <changefreq>monthly</changefreq>
@@ -52,6 +62,11 @@
   </url>
   <url>
     <loc>https://ngx-datatables-net.ascentspark.com/features/filtering</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://ngx-datatables-net.ascentspark.com/features/range-filter</loc>
     <priority>0.6</priority>
     <changefreq>monthly</changefreq>
   </url>

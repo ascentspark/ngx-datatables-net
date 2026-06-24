@@ -26,6 +26,14 @@ import { RouterLink } from '@angular/router';
         Angular wrapper maintained by
         <a href="https://ascentspark.com" target="_blank" rel="noopener">Ascentspark</a>.
       </p>
+
+      <p class="gs-whatsnew">
+        <span class="gs-whatsnew__tag">New &middot; 2026-06-24</span>
+        <a routerLink="/features/edit-in-place">Edit in place</a> — double-click a cell to edit it
+        inline, with text, number, date, checkbox, select, multiselect and custom editors,
+        validation and optional async saving. See the
+        <a routerLink="/features/edit-in-place">live demo</a>.
+      </p>
     </section>
 
     <section class="gs-steps">
@@ -47,8 +55,8 @@ import { RouterLink } from '@angular/router';
               underlying library, and <code>datatables.net-dt</code> is its default theme.
             </p>
             <p>
-              Pick the line that matches your Angular version. The package API is the same across all
-              three, so everything below works unchanged.
+              Pick the line that matches your Angular version. The package API is the same across
+              all three, so everything below works unchanged.
             </p>
             <div class="gs-vers" role="group" aria-label="Angular version">
               @for (v of ngVersions; track v) {
@@ -212,6 +220,10 @@ export class GettingStarted {
     {
       q: 'Which DataTables extensions work?',
       a: 'All of them, with no library-specific code: Buttons, Select, ColumnControl, Responsive, FixedHeader, FixedColumns, Scroller, RowGroup, RowReorder, ColReorder, SearchPanes, SearchBuilder, KeyTable, AutoFill, DateTime and StateRestore. Import the extension package and configure it through dtOptions. The commercial Editor is compatible via the exposed Api.',
+    },
+    {
+      q: 'Is there a free alternative to DataTables Editor for inline editing?',
+      a: "Yes. The [dtEditable] directive (added in 22.2.0) gives free, MIT-licensed double-click edit-in-place: text, textarea, number, date, checkbox, select, multiselect and custom editors, with validation, keyboard navigation and optional async saving via [dtSave]. DataTables' own inline editing ships only in the paid commercial Editor extension; [dtEditable] gives the same experience without a licence.",
     },
     {
       q: 'Can I use it with server-side rendering (SSR)?',

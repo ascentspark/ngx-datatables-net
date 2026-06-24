@@ -51,6 +51,16 @@ export const routes: Routes = [
     title: 'Angular cell templates, ngx-datatables-net',
   },
   {
+    path: 'features/edit-in-place',
+    loadComponent: () =>
+      import('./examples/features/edit-in-place').then((m) => m.FeaturesEditInPlace),
+    title: 'Edit in place, ngx-datatables-net',
+    data: {
+      description:
+        'Free double-click inline editing for Angular DataTables: text, textarea, number, date, checkbox, select, multiselect and custom cell editors, with validation and optional async saving, via the [dtEditable] directive. A free, MIT-licensed alternative to the paid DataTables Editor.',
+    },
+  },
+  {
     path: 'features/pagination',
     loadComponent: () => import('./examples/features/pagination').then((m) => m.FeaturesPagination),
     title: 'Pagination, ngx-datatables-net',
@@ -67,7 +77,8 @@ export const routes: Routes = [
   },
   {
     path: 'features/range-filter',
-    loadComponent: () => import('./examples/features/range-filter').then((m) => m.FeaturesRangeFilter),
+    loadComponent: () =>
+      import('./examples/features/range-filter').then((m) => m.FeaturesRangeFilter),
     title: 'Custom range filter, ngx-datatables-net',
   },
   {
