@@ -172,7 +172,7 @@ required). No firm dates yet, and pull requests are very welcome:
 - **Master / detail rows**: expandable detail rows and nested sub-grids, driven by Angular templates.
 - **Row grouping**: group headers with expand/collapse and aggregation helpers, on top of RowGroup.
 - **Clipboard**: Excel-style copy (and paste) for the whole table and for cell ranges.
-- **Pivoting**: summarise rows into a cross-tab / pivot view (exploratory).
+- **Cell selection**: select individual cells and rectangular ranges, building on the Select extension.
 
 Following the same approach as edit-in-place: modern Angular (signals, standalone, zoneless), and
 free alternatives to features that are otherwise paid in other grids.
