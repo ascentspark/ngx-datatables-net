@@ -1,20 +1,12 @@
 name: Release
 
-# Publishes the library to npm with provenance via OIDC trusted publishing — no npm token needed.
-# Run it from the branch of the line you are releasing (main = 22 line, 21.x, 20.x) after bumping
-# the version in projects/ngx-datatables-net/package.json, and pick the matching dist-tag.
+# Publishes the library to npm with provenance via OIDC trusted publishing (no npm token needed).
+# Run it from the branch of the line you are releasing, after bumping the version in
+# projects/ngx-datatables-net/package.json. The npm dist-tag is DERIVED from the branch
+# automatically (main -> latest, <N>.x -> ng<N>), so a maintenance-line release can never clobber
+# `latest`. The version major is also checked against the branch as a safety net.
 on:
   workflow_dispatch:
-    inputs:
-      dist-tag:
-        description: 'npm dist-tag (latest for the newest major, otherwise ng21 / ng20)'
-        required: true
-        default: latest
-        type: choice
-        options:
-          - latest
-          - ng21
-          - ng20
 
 permissions:
   contents: read
@@ -25,14 +17,38 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           registry-url: https://registry.npmjs.org
           cache: npm
+
+      - name: Derive npm dist-tag from the branch and verify the version
+        id: meta
+        run: |
+          ref='${{ github.ref_name }}'
+          version="$(node -p "require('./projects/ngx-datatables-net/package.json').version")"
+          major="${version%%.*}"
+          if [ "$ref" = "main" ]; then
+            tag="latest"
+          elif printf '%s' "$ref" | grep -qE '^[0-9]+\.x$'; then
+            line="${ref%.x}"
+            tag="ng${line}"
+            if [ "$major" != "$line" ]; then
+              echo "::error::Version $version (major $major) does not match release line $ref."
+              exit 1
+            fi
+          else
+            echo "::error::Refusing to publish from branch '$ref'. Run Release from main or an <N>.x branch."
+            exit 1
+          fi
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          echo "Publishing $version with dist-tag '$tag' from branch '$ref'."
+
       # Trusted publishing (OIDC) needs a recent npm.
       - run: npm install -g npm@latest
       - run: npm ci
       - run: npx ng build ngx-datatables-net
-      - run: npm publish --provenance --access public --tag ${{ inputs.dist-tag }}
+      - run: npm publish --provenance --access public --tag '${{ steps.meta.outputs.tag }}'
         working-directory: dist/ngx-datatables-net
