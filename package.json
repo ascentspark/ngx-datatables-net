@@ -28,6 +28,7 @@
     "@angular/compiler-cli": "^22.0.0",
     "@playwright/test": "^1.60.0",
     "@types/jquery": "^3.5.34",
+    "@types/node": "^22.20.0",
     "bootstrap": "^5.3.8",
     "datatables.net": "^2.3.8",
     "datatables.net-autofill": "^2.7.1",
