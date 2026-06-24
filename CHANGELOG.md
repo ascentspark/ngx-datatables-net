@@ -3,6 +3,15 @@
 All notable changes to `ngx-datatables-net` are recorded here. Dates are ISO (YYYY-MM-DD). The
 package major tracks the Angular major; see [README](README.md#versions) for the version policy.
 
+## 22.2.1 — 2026-06-25
+
+### Changed
+
+- Docs only. Sharpened the positioning to verifiable, honest claims: lead with the architecture and
+  peer-dependency contrast (no `jquery`, `zone.js` or `rxjs` required of the consumer) rather than
+  "no jQuery". DataTables uses jQuery internally, so it still ships transitively; the README now
+  states that plainly. No code changes.
+
 ## 22.2.0 — 2026-06-24
 
 ### Added
