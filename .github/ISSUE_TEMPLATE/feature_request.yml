@@ -1,0 +1,50 @@
+name: Feature request
+description: Suggest an idea or enhancement for ngx-datatables-net
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the idea. For non-trivial features, opening this issue first
+        lets us agree on the public API before any code is written.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem / use case
+      description: What are you trying to do that the library doesn't support today?
+      placeholder: I want to drive column visibility from a signal…
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: >
+        How might it look as an Angular API — an input, an output, a provider
+        function? A rough sketch is fine.
+      render: ts
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Workarounds you've tried, or other API shapes you weighed.
+  - type: dropdown
+    id: scope
+    attributes:
+      label: Does this belong in the wrapper or in DataTables itself?
+      description: We wrap DataTables; behavior changes to the table engine belong upstream.
+      options:
+        - Angular wrapper feature (this library)
+        - Not sure
+        - Upstream DataTables behavior
+    validations:
+      required: true
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: I searched existing issues and discussions for a similar request.
+          required: true

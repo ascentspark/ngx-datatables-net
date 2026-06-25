@@ -1,0 +1,88 @@
+name: Bug report
+description: Report a problem with ngx-datatables-net
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to file a bug. Please search existing issues
+        first to avoid duplicates. For security issues, do **not** file here —
+        see [SECURITY.md](../blob/main/docs/SECURITY.md).
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: A clear description of the bug, including what you expected instead.
+      placeholder: When I bind `[dtOptions]` with server-side processing, the table…
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Minimal reproduction
+      description: >
+        A StackBlitz, a public repo, or a minimal code snippet (template +
+        options). Reproductions get fixed far faster than descriptions.
+      render: ts
+    validations:
+      required: true
+  - type: input
+    id: lib-version
+    attributes:
+      label: ngx-datatables-net version
+      placeholder: "22.2.1"
+    validations:
+      required: true
+  - type: dropdown
+    id: angular-version
+    attributes:
+      label: Angular major
+      options:
+        - "22"
+        - "21"
+        - "20"
+        - other
+    validations:
+      required: true
+  - type: dropdown
+    id: zoneless
+    attributes:
+      label: Change detection
+      options:
+        - Zoneless
+        - Zone.js
+        - Not sure
+    validations:
+      required: true
+  - type: input
+    id: datatables-version
+    attributes:
+      label: datatables.net version
+      placeholder: "2.1.0"
+  - type: input
+    id: styling
+    attributes:
+      label: Styling adapter
+      description: Which DataTables styling package / adapter you use.
+      placeholder: "datatables.net-dt / bs5 / tailwind / material"
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Browser, OS, SSR (yes/no), and anything else relevant.
+      placeholder: Chrome 126, macOS, SSR enabled
+  - type: textarea
+    id: logs
+    attributes:
+      label: Console output
+      description: Any errors or warnings from the browser console or build.
+      render: shell
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: I searched existing issues and this is not a duplicate.
+          required: true
+        - label: This is not a security report (those go through SECURITY.md).
+          required: true
