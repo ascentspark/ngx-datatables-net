@@ -64,6 +64,9 @@ updates:
     ignore:
       - dependency-name: "@angular/*"
         update-types: ["version-update:semver-major"]
+      # Angular 20's compiler requires TypeScript >=5.8 <6.0; never bump TS across majors.
+      - dependency-name: "typescript"
+        update-types: ["version-update:semver-major"]
 
   # ---- GitHub Actions (workflows live on main) ----
   - package-ecosystem: github-actions
