@@ -26,8 +26,8 @@
     "@angular/build": "^20.0.0",
     "@angular/cli": "^20.0.0",
     "@angular/compiler-cli": "^20.0.0",
-    "@playwright/test": "^1.60.0",
-    "@types/jquery": "^3.5.34",
+    "@playwright/test": "^1.61.1",
+    "@types/jquery": "^4.0.1",
     "bootstrap": "^5.3.8",
     "datatables.net": "^2.3.8",
     "datatables.net-autofill": "^2.7.1",
@@ -63,13 +63,13 @@
     "datatables.net-select-dt": "^3.1.3",
     "datatables.net-staterestore": "^1.4.3",
     "datatables.net-staterestore-dt": "^1.4.3",
-    "jquery": "^3.7.1",
-    "jsdom": "^28.0.0",
+    "jquery": "^4.0.0",
+    "jsdom": "^29.1.1",
     "jszip": "^3.10.1",
     "ng-packagr": "^20.0.0",
-    "pdfmake": "^0.2.23",
+    "pdfmake": "^0.3.11",
     "prettier": "^3.8.1",
-    "typescript": "~5.8.0",
-    "vitest": "^4.0.8"
+    "typescript": "~6.0.3",
+    "vitest": "^4.1.9"
   }
 }
