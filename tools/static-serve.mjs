@@ -9,9 +9,10 @@
  */
 import { createServer } from 'node:http';
 import { readFile, stat } from 'node:fs/promises';
-import { extname, join, normalize } from 'node:path';
+import { extname, join, normalize, resolve, sep } from 'node:path';
 
 const [, , root = 'dist/demo/browser', port = '4290'] = process.argv;
+const ROOT = resolve(root);
 
 const TYPES = {
   '.html': 'text/html',
@@ -32,18 +33,24 @@ async function send(res, file, status = 200) {
 }
 
 createServer(async (req, res) => {
+  const spaFallback = () => send(res, join(ROOT, 'index.csr.html'));
   try {
     const path = decodeURIComponent((req.url ?? '/').split('?')[0]);
-    if (path === '/') return await send(res, join(root, 'index.html'));
-    const candidate = join(root, normalize(path));
+    if (path === '/') return await send(res, join(ROOT, 'index.html'));
+    // Resolve the request against ROOT and confirm it stays inside ROOT before
+    // touching the filesystem, so a crafted path (e.g. "/../secret") can never
+    // escape the served directory. Anything that escapes gets the SPA shell.
+    const candidate = resolve(ROOT, '.' + normalize(path));
+    if (candidate !== ROOT && !candidate.startsWith(ROOT + sep)) return await spaFallback();
     try {
       if ((await stat(candidate)).isFile()) return await send(res, candidate);
     } catch {
       /* fall through to SPA fallback */
     }
-    return await send(res, join(root, 'index.csr.html'));
+    return await spaFallback();
   } catch (err) {
-    res.writeHead(500);
-    res.end(String(err));
+    console.error(err);
+    res.writeHead(500, { 'content-type': 'text/plain' });
+    res.end('Internal Server Error');
   }
 }).listen(Number(port), () => console.log(`static serve ${root} on http://localhost:${port}`));
