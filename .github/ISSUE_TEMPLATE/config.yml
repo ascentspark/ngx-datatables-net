@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 📖 Documentation & live demo
+    url: https://ngx-datatables-net.ascentspark.com
+    about: Browse the docs and runnable examples before filing an issue.
+  - name: 🔒 Report a security vulnerability
+    url: https://github.com/ascentspark/ngx-datatables-net/blob/main/docs/SECURITY.md
+    about: Please report security issues privately — do not open a public issue.
+  - name: 💬 Questions & usage help
+    url: https://github.com/ascentspark/ngx-datatables-net/discussions
+    about: Ask how-to and usage questions in Discussions, not the issue tracker.
