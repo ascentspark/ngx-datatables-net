@@ -1,0 +1,75 @@
+version: 2
+
+updates:
+  # ---- npm: Angular 22 line (main / latest) ----
+  - package-ecosystem: npm
+    directory: "/"
+    target-branch: main
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 10
+    labels:
+      - dependencies
+    groups:
+      angular:
+        patterns:
+          - "@angular/*"
+          - "@angular-devkit/*"
+          - "ng-packagr"
+      dev-dependencies:
+        dependency-type: development
+    ignore:
+      # Angular majors are pinned per release line; never auto-bump across majors.
+      - dependency-name: "@angular/*"
+        update-types: ["version-update:semver-major"]
+
+  # ---- npm: Angular 21 line ----
+  - package-ecosystem: npm
+    directory: "/"
+    target-branch: "21.x"
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 10
+    labels:
+      - dependencies
+    groups:
+      angular:
+        patterns:
+          - "@angular/*"
+          - "@angular-devkit/*"
+          - "ng-packagr"
+      dev-dependencies:
+        dependency-type: development
+    ignore:
+      - dependency-name: "@angular/*"
+        update-types: ["version-update:semver-major"]
+
+  # ---- npm: Angular 20 line ----
+  - package-ecosystem: npm
+    directory: "/"
+    target-branch: "20.x"
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 10
+    labels:
+      - dependencies
+    groups:
+      angular:
+        patterns:
+          - "@angular/*"
+          - "@angular-devkit/*"
+          - "ng-packagr"
+      dev-dependencies:
+        dependency-type: development
+    ignore:
+      - dependency-name: "@angular/*"
+        update-types: ["version-update:semver-major"]
+
+  # ---- GitHub Actions (workflows live on main) ----
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly
+    labels:
+      - dependencies
+      - github-actions
