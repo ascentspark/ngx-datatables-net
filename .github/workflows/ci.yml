@@ -6,6 +6,10 @@ on:
   pull_request:
   workflow_dispatch:
 
+# Least privilege: this workflow only needs to read the repository to build and test.
+permissions:
+  contents: read
+
 # Build and unit-test the library against every supported Angular major. Each release line pins its
 # own Angular version in package.json, so the matrix checks out each branch and runs against the
 # Angular it targets.
