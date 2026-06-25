@@ -1,0 +1,27 @@
+name: CI
+
+on:
+  push:
+    branches: ['21.x']
+  pull_request:
+  workflow_dispatch:
+
+# Least privilege: this workflow only needs to read the repository to build and test.
+permissions:
+  contents: read
+
+# This is the Angular 21 maintenance line. Build and unit-test the library against the Angular
+# major this branch pins. Pull requests targeting 21.x are gated by this workflow.
+jobs:
+  build-test:
+    name: Angular 21
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx ng build ngx-datatables-net
+      - run: npx ng test ngx-datatables-net --watch=false
