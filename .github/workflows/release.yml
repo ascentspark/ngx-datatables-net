@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write # create the git tag + GitHub Release after publishing
   id-token: write # required for npm provenance / trusted publishing
 
 jobs:
@@ -44,6 +44,8 @@ jobs:
             exit 1
           fi
           echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "major=$major" >> "$GITHUB_OUTPUT"
           echo "Publishing $version with dist-tag '$tag' from branch '$ref'."
 
       # Trusted publishing (OIDC) needs a recent npm.
@@ -52,3 +54,32 @@ jobs:
       - run: npx ng build ngx-datatables-net
       - run: npm publish --provenance --access public --tag '${{ steps.meta.outputs.tag }}'
         working-directory: dist/ngx-datatables-net
+
+      # Tag the published commit and cut a GitHub Release. The dist-tag drives "latest":
+      # only the main line (dist-tag `latest`) is marked the latest GitHub Release; maintenance
+      # lines are published as non-latest so they never displace it. Idempotent: skips if the
+      # tag/release already exists.
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          version='${{ steps.meta.outputs.version }}'
+          disttag='${{ steps.meta.outputs.tag }}'
+          major='${{ steps.meta.outputs.major }}'
+          if [ "$disttag" = "latest" ]; then
+            latest_flag="--latest"
+            install="npm i ngx-datatables-net"
+          else
+            latest_flag="--latest=false"
+            install="npm i ngx-datatables-net@$disttag"
+          fi
+          if gh release view "v$version" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo "Release v$version already exists — skipping."
+          else
+            gh release create "v$version" \
+              --repo "$GITHUB_REPOSITORY" \
+              --target "$GITHUB_SHA" \
+              --title "v$version (Angular $major)" \
+              --notes "Angular $major line — npm dist-tag \`$disttag\`. \`$install\`. See [CHANGELOG](https://github.com/$GITHUB_REPOSITORY/blob/$GITHUB_REF_NAME/CHANGELOG.md)." \
+              $latest_flag
+          fi
