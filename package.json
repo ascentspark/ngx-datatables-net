@@ -23,9 +23,9 @@
     "tslib": "^2.3.0"
   },
   "devDependencies": {
-    "@angular/build": "^21.0.0",
-    "@angular/cli": "^21.0.0",
-    "@angular/compiler-cli": "^21.0.0",
+    "@angular/build": "^21.2.19",
+    "@angular/cli": "^21.2.19",
+    "@angular/compiler-cli": "^21.2.18",
     "@playwright/test": "^1.61.1",
     "@types/jquery": "^4.0.1",
     "bootstrap": "^5.3.8",
@@ -66,10 +66,10 @@
     "jquery": "^4.0.0",
     "jsdom": "^29.1.1",
     "jszip": "^3.10.1",
-    "ng-packagr": "^22.0.0",
+    "ng-packagr": "^22.0.1",
     "pdfmake": "^0.3.11",
-    "prettier": "^3.8.1",
-    "typescript": "~6.0.3",
-    "vitest": "^4.1.9"
+    "prettier": "^3.9.5",
+    "typescript": "~7.0.2",
+    "vitest": "^4.1.10"
   }
 }
