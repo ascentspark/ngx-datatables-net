@@ -891,3 +891,190 @@ describe('DtEditableDirective + dtTemplate column', () => {
     expect(nameCell(fixture).querySelector('input')).toBeNull();
   });
 });
+
+// ---------------------------------------------------------------------------------------------
+// serverSide: true — a draw() re-fetches the whole page over ajax, so a commit must NOT draw.
+// The cell is written and re-rendered locally; the next natural draw re-fetches from the server.
+// ---------------------------------------------------------------------------------------------
+interface ServerRow {
+  id: number;
+  name: string;
+}
+
+@Component({
+  imports: [DtTableDirective, DtEditableDirective],
+  template: `
+    <table
+      dtTable
+      dtEditable
+      #t="dtTable"
+      [dtOptions]="options"
+      [dtColumns]="cols()"
+      [dtSave]="saveFn()"
+      (dtCellEdit)="lastEdit.set($event)"
+    >
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Shout</th>
+        </tr>
+      </thead>
+    </table>
+    <ng-template #shoutTpl let-value
+      ><span class="shout-cell">{{ value }}!</span></ng-template
+    >
+  `,
+})
+class ServerSideHost {
+  /** The mutable "database" behind the simulated server. */
+  readonly db: ServerRow[] = [
+    { id: 1, name: 'Ada' },
+    { id: 2, name: 'Linus' },
+  ];
+  ajaxCalls = 0;
+  readonly lastEdit = signal<DtCellEditCommit<ServerRow> | null>(null);
+  readonly saveFn = signal<DtCellSaveHandler<ServerRow> | undefined>(undefined);
+  readonly shoutTpl = viewChild<TemplateRef<DtCellContext<ServerRow>>>('shoutTpl');
+  readonly dir = viewChild.required<DtTableDirective<ServerRow>>('t');
+
+  readonly options = {
+    serverSide: true,
+    // Synchronous simulated server: every draw comes through here.
+    ajax: (request: { draw?: number } & object, callback: (res: object) => void) => {
+      this.ajaxCalls++;
+      callback({
+        draw: request.draw,
+        recordsTotal: this.db.length,
+        recordsFiltered: this.db.length,
+        data: this.db.map((r) => ({ ...r })),
+      });
+    },
+  };
+
+  readonly cols = computed<DtColumn<ServerRow>[] | undefined>(() => {
+    const shout = this.shoutTpl();
+    if (!shout) {
+      return undefined;
+    }
+    return [
+      { data: 'id', title: 'ID' },
+      { data: 'name', title: 'Name', editor: { type: 'text' } },
+      { data: 'name', title: 'Shout', dtTemplate: shout, editor: { type: 'text' } },
+    ];
+  });
+}
+
+describe('DtEditableDirective in serverSide mode', () => {
+  beforeEach(() => {
+    TestBed.configureTestingModule({ providers: [provideZonelessChangeDetection()] });
+  });
+
+  async function mountSs(): Promise<{
+    fixture: ComponentFixture<ServerSideHost>;
+    host: ServerSideHost;
+  }> {
+    const fixture = TestBed.createComponent(ServerSideHost);
+    fixture.autoDetectChanges();
+    await fixture.whenStable();
+    return { fixture, host: fixture.componentInstance };
+  }
+
+  function ssCell(
+    fixture: ComponentFixture<ServerSideHost>,
+    rowIndex: number,
+    colIndex: number,
+  ): HTMLTableCellElement {
+    const rows = fixture.nativeElement.querySelectorAll('table tbody tr');
+    return (rows[rowIndex] as HTMLElement).querySelectorAll('td')[colIndex] as HTMLTableCellElement;
+  }
+
+  it('commits without triggering an ajax re-fetch, and renders the new value in the cell', async () => {
+    const { fixture, host } = await mountSs();
+    const callsAfterInit = host.ajaxCalls;
+    expect(callsAfterInit).toBeGreaterThan(0);
+
+    const td = ssCell(fixture, 0, 1);
+    dblclick(td);
+    await fixture.whenStable();
+    const input = td.querySelector('input') as HTMLInputElement;
+    input.value = 'Grace';
+    key(input, 'Enter');
+    await fixture.whenStable();
+
+    expect(host.ajaxCalls).toBe(callsAfterInit); // NO re-fetch for a one-cell commit
+    expect(host.dir().instance()!.cell(0, 1).data()).toBe('Grace');
+    expect(ssCell(fixture, 0, 1).textContent).toBe('Grace');
+    expect(ssCell(fixture, 0, 1).querySelector('input')).toBeNull();
+    expect(host.lastEdit()?.newValue).toBe('Grace');
+  });
+
+  it('runs the save handler before the local write (pessimistic), still with no re-fetch', async () => {
+    const { fixture, host } = await mountSs();
+    // The save handler persists to the "database", as a real PATCH endpoint would.
+    host.saveFn.set((commit) => {
+      const row = host.db.find((r) => r.id === commit.row.id);
+      if (row) {
+        row.name = String(commit.newValue);
+      }
+    });
+    await fixture.whenStable();
+    const callsBefore = host.ajaxCalls;
+
+    const td = ssCell(fixture, 0, 1);
+    dblclick(td);
+    await fixture.whenStable();
+    const input = td.querySelector('input') as HTMLInputElement;
+    input.value = 'Grace';
+    key(input, 'Enter');
+    await fixture.whenStable();
+
+    expect(host.ajaxCalls).toBe(callsBefore);
+    expect(host.db[0].name).toBe('Grace'); // persisted server-side
+    expect(ssCell(fixture, 0, 1).textContent).toBe('Grace'); // and visible locally
+  });
+
+  it('the next natural draw re-fetches and shows the server truth', async () => {
+    const { fixture, host } = await mountSs();
+    host.saveFn.set((commit) => {
+      const row = host.db.find((r) => r.id === commit.row.id);
+      if (row) {
+        row.name = String(commit.newValue);
+      }
+    });
+    await fixture.whenStable();
+
+    const td = ssCell(fixture, 0, 1);
+    dblclick(td);
+    await fixture.whenStable();
+    const input = td.querySelector('input') as HTMLInputElement;
+    input.value = 'Grace';
+    key(input, 'Enter');
+    await fixture.whenStable();
+    const callsBeforeDraw = host.ajaxCalls;
+
+    host.dir().instance()!.draw(false); // e.g. the user pages or sorts
+    await fixture.whenStable();
+
+    expect(host.ajaxCalls).toBe(callsBeforeDraw + 1);
+    expect(ssCell(fixture, 0, 1).textContent).toBe('Grace'); // server returned the saved value
+  });
+
+  it('re-renders a templated column cell locally on commit, without a re-fetch', async () => {
+    const { fixture, host } = await mountSs();
+    const callsAfterInit = host.ajaxCalls;
+    const td = ssCell(fixture, 0, 2);
+    expect(td.querySelector('.shout-cell')?.textContent).toBe('Ada!');
+
+    dblclick(td);
+    await fixture.whenStable();
+    const input = td.querySelector('input') as HTMLInputElement;
+    expect(input.value).toBe('Ada'); // raw value, not the template output
+    input.value = 'Grace';
+    key(input, 'Enter');
+    await fixture.whenStable();
+
+    expect(host.ajaxCalls).toBe(callsAfterInit);
+    expect(ssCell(fixture, 0, 2).querySelector('.shout-cell')?.textContent).toBe('Grace!');
+  });
+});

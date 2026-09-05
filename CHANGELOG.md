@@ -3,6 +3,25 @@
 All notable changes to `ngx-datatables-net` are recorded here. Dates are ISO (YYYY-MM-DD). The
 package major tracks the Angular major; see [README](README.md#versions) for the version policy.
 
+## 22.3.0 — 2026-09-05
+
+### Added
+
+- **`DtTableDirective.rerenderCell(rowIndex, colIndex)`** — re-renders a single cell's display from
+  its current row data without a draw. Plain columns go through the column's normal `render`
+  pipeline (the escaping defaults still apply); `dtTemplate` columns get a fresh embedded view.
+
+### Fixed
+
+- **Edit in place under `serverSide: true`** — committing an edit used to call `draw(false)`, which
+  in server-side mode re-fetches the whole page over ajax: a full-table roundtrip for a one-cell
+  change, rendering whatever the server returned (so a lagging read replica could silently revert
+  the value the user just saw saved). A commit in server-side mode now writes the cell and
+  re-renders only that cell locally — no draw, no request; the next natural draw (paging, sorting,
+  filtering) re-fetches and shows the persisted value. Bind a `dtSave` handler in server-side mode:
+  it is what persists the edit. Docs: [docs/EDIT-IN-PLACE.md](docs/EDIT-IN-PLACE.md#server-side-tables-serverside-true).
+  The server-side demo now includes an editable column.
+
 ## 22.2.1 — 2026-06-25
 
 ### Changed

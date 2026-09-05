@@ -152,6 +152,27 @@ save: DtCellSaveHandler<Person> = (commit) =>
 <table dtTable dtEditable [dtData]="people()" [dtColumns]="columns" [dtSave]="save"></table>
 ```
 
+## Server-side tables (`serverSide: true`)
+
+Editing works in server-side mode, and the commit path is deliberately different from the
+client-side one. In a client-side table a commit writes the cell and redraws (`draw(false)`); in a
+server-side table **any** draw re-fetches the whole page over ajax, which would turn every one-cell
+edit into a full-table roundtrip — and would render whatever the server returns, so a lagging read
+replica could silently revert the edit the user just watched succeed.
+
+So under `serverSide: true` a commit instead:
+
+1. runs your `[dtSave]` handler first (pessimistic, as always) — this is what persists the value,
+   typically a `PATCH` to your API;
+2. writes the value into the local row cache (`cell().data()`), so reads through the `Api` return it;
+3. re-renders **just that cell** — through the column's normal `render` pipeline, or by rebuilding
+   the cell's Angular template view — with no draw and no ajax request.
+
+The committed value stays visible until the next natural draw (paging, sorting, filtering), which
+re-fetches from the server as usual and shows the persisted truth. In server-side mode you should
+always bind a `[dtSave]` handler: without one the edit exists only in the browser and the next
+re-fetch discards it.
+
 ## Events
 
 | Output               | Payload                | Fired when                                            |

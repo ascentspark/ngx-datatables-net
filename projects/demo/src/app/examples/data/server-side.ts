@@ -1,5 +1,11 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { DtTableDirective, type Config } from 'ngx-datatables-net';
+import {
+  DtEditableDirective,
+  DtTableDirective,
+  type Config,
+  type DtCellSaveHandler,
+  type DtColumn,
+} from 'ngx-datatables-net';
 import { ExampleCard, type ExampleSource } from '../../shared/example-card';
 import { makeEmployees, type Employee } from '../../data/employees';
 
@@ -24,14 +30,21 @@ const FIELDS: (keyof Employee)[] = [
 @Component({
   selector: 'demo-data-server-side',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [DtTableDirective, ExampleCard],
+  imports: [DtTableDirective, DtEditableDirective, ExampleCard],
   template: `
     <demo-example
       title="Server-side processing"
-      description="serverSide: true delegates paging/sorting/filtering to the backend. This demo's ajax is a function simulating a server over 500 rows, only the current page is ever sent to the browser."
+      description="serverSide: true delegates paging/sorting/filtering to the backend. This demo's ajax is a function simulating a server over 500 rows, only the current page is ever sent to the browser. The Name column is editable in place (double-click): the save handler persists to the simulated server, and the commit re-renders only that cell — no page re-fetch."
       [sources]="sources"
     >
-      <table dtTable class="display" style="width:100%" [dtOptions]="options">
+      <table
+        dtTable
+        dtEditable
+        class="display"
+        style="width:100%"
+        [dtOptions]="options"
+        [dtSave]="save"
+      >
         <thead>
           <tr>
             <th>ID</th>
@@ -162,7 +175,13 @@ export class DataServerSide {
   protected readonly options: Config = {
     serverSide: true,
     processing: true,
-    columns: FIELDS.map((f) => ({ data: f, title: String(f) })),
+    columns: FIELDS.map<DtColumn<Employee>>((f) => ({
+      data: f,
+      title: String(f),
+      // Editing works in serverSide mode: the commit re-renders only the edited cell instead of
+      // drawing (a draw would re-fetch the whole page over ajax).
+      ...(f === 'name' ? { editor: { type: 'text' as const } } : {}),
+    })),
     // The ajax FUNCTION form, no jQuery. In a real app this would be an HttpClient call.
     ajax: (request: any, callback: (res: any) => void) => {
       const { start = 0, length = 10, search, order } = request;
@@ -192,6 +211,21 @@ export class DataServerSide {
       });
     },
   };
+
+  /**
+   * Pessimistic save for the inline edit: "PATCH" the simulated server before the cell is written.
+   * The delay makes the busy state visible; a real app would call its API here.
+   */
+  protected readonly save: DtCellSaveHandler<Employee> = (commit) =>
+    new Promise<void>((resolve) => {
+      setTimeout(() => {
+        const row = DATASET.find((r) => r.id === commit.row.id);
+        if (row && commit.columnKey != null) {
+          (row as unknown as Record<string, unknown>)[String(commit.columnKey)] = commit.newValue;
+        }
+        resolve();
+      }, 400);
+    });
 
   protected readonly sources: ExampleSource[] = [
     {
@@ -231,6 +265,28 @@ options: Config = {
     );
   },
 };`,
+    },
+    {
+      label: 'inline-editing.ts',
+      lang: 'ts',
+      code: `// Editing works with serverSide: true. Add dtEditable + a save handler that
+// PATCHes your API; the commit re-renders only the edited cell (no page
+// re-fetch), and the next natural draw (page/sort/filter) re-fetches and shows
+// the server's persisted value.
+//
+// <table dtTable dtEditable [dtOptions]="options" [dtSave]="save">
+
+columns: [
+  { data: 'name', title: 'Name', editor: { type: 'text' } },
+  // ...
+],
+
+save: DtCellSaveHandler<Employee> = (commit) =>
+  firstValueFrom(
+    this.http.patch(\`/api/employees/\${commit.row.id}\`, {
+      [String(commit.columnKey)]: commit.newValue,
+    }),
+  );`,
     },
   ];
 }
