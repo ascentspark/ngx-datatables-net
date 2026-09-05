@@ -82,6 +82,9 @@ interface ActiveEdit<T> {
  *   Angular and `markForCheck()`. Native control listeners fire outside Angular and re-enter on emit.
  * - Commit writes through the DataTables `Api` (`cell().data(v).draw(false)`), keeping sort, filter
  *   and search correct. Cancel restores the exact original cell nodes without a redraw.
+ * - Under `serverSide: true` a `draw()` would re-fetch the whole page over ajax, so commit instead
+ *   writes the cell data and re-renders just that cell locally (`DtTableDirective.rerenderCell`);
+ *   the save handler has already persisted the value, and the next natural draw re-fetches it.
  *
  * @typeParam T row data shape (matched to the host `dtTable`).
  */
@@ -438,9 +441,18 @@ export class DtEditableDirective<T = unknown> {
     // directive's cell-template rebuild never races a half-destroyed control).
     this.teardownControl(a);
     const api = a.ctx.api;
+    const serverSide = this.isServerSide(api);
     this.zone.runOutsideAngular(() => {
       a.cell.data(commit.newValue as never);
-      api.draw(false); // re-renders the cell from data; keeps the current page
+      if (serverSide) {
+        // In server-side mode any draw() is a full ajax re-fetch — a whole-table roundtrip for a
+        // one-cell commit, and what renders afterwards is whatever the server returns (a lagging
+        // read replica silently reverts the edit). The save handler has already persisted the
+        // value, so re-render just this cell locally; the next natural draw re-fetches the page.
+        this.host.rerenderCell(a.ctx.rowIndex, a.ctx.colIndex);
+      } else {
+        api.draw(false); // re-renders the cell from data; keeps the current page
+      }
     });
     a.td.classList.remove('ngxdt-editing');
     this.active = null;
@@ -849,6 +861,13 @@ export class DtEditableDirective<T = unknown> {
   }
 
   // ---- Helpers ------------------------------------------------------------------------------
+  private isServerSide(api: Api<T>): boolean {
+    const settings = (
+      api.settings() as unknown as Array<{ oFeatures?: { bServerSide?: boolean } }>
+    )[0];
+    return settings?.oFeatures?.bServerSide === true;
+  }
+
   private editorFor(colIndex: number): DtEditorConfig<T> | undefined {
     return this.resolvedColumns()?.[colIndex]?.editor;
   }
