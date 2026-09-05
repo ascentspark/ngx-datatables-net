@@ -107,9 +107,10 @@ export class DtTableDirective<T = unknown> {
   private rowClickCleanup?: () => void;
 
   // Angular cell templates: colIndex -> TemplateRef, plus the live EmbeddedViews currently mounted
-  // into cells (rebuilt on every draw, torn down on redraw/destroy to avoid leaks).
+  // into cells (rebuilt on every draw, torn down on redraw/destroy to avoid leaks). Keyed by
+  // `${rowIndex}:${colIndex}` so a single cell's view can be replaced without a full redraw.
   private cellTemplates = new Map<number, TemplateRef<DtCellContext<T>>>();
-  private readonly cellViews = new Set<EmbeddedViewRef<DtCellContext<T>>>();
+  private readonly cellViews = new Map<string, EmbeddedViewRef<DtCellContext<T>>>();
 
   /** Stable structural key; functions and TemplateRefs collapse to markers so the key serializes. */
   private structuralKey(value: unknown): string {
@@ -363,7 +364,7 @@ export class DtTableDirective<T = unknown> {
         appRef.attachView(view);
         view.detectChanges();
         cell.replaceChildren(...(view.rootNodes as Node[]));
-        views.add(view);
+        views.set(`${rowIndex}:${colIndex}`, view);
       });
     });
   }
@@ -375,6 +376,55 @@ export class DtTableDirective<T = unknown> {
       view.destroy();
     });
     this.cellViews.clear();
+  }
+
+  /**
+   * Re-render a single cell's display from its current (possibly just-updated) row data WITHOUT a
+   * draw. `[dtEditable]` uses this to commit in `serverSide: true` mode, where `draw()` would
+   * trigger a full ajax re-fetch of the page for a one-cell change. Templated columns get a fresh
+   * EmbeddedView; plain columns are written the same way DataTables writes display data on draw
+   * (the column's `render` pipeline — including the escaping defaults — still applies).
+   */
+  rerenderCell(rowIndex: number, colIndex: number): void {
+    const api = untracked(this._instance);
+    if (!api) {
+      return;
+    }
+    const cell = api.cell(rowIndex, colIndex);
+    const td = (cell.node() as HTMLElement | null) ?? null;
+    if (!td) {
+      return; // cell not on the current page
+    }
+    const template = this.cellTemplates.get(colIndex);
+    if (!template) {
+      const display = cell.render('display') as unknown;
+      if (display instanceof Node) {
+        td.replaceChildren(display);
+      } else {
+        td.innerHTML = display == null ? '' : String(display);
+      }
+      return;
+    }
+    const key = `${rowIndex}:${colIndex}`;
+    const old = this.cellViews.get(key);
+    if (old) {
+      this.appRef.detachView(old);
+      old.destroy();
+      this.cellViews.delete(key);
+    }
+    const cellData = cell.data();
+    const row = api.row(rowIndex).data() as T;
+    const view = template.createEmbeddedView({
+      $implicit: cellData,
+      cellData,
+      row,
+      rowIndex,
+      colIndex,
+    });
+    this.appRef.attachView(view);
+    view.detectChanges();
+    td.replaceChildren(...(view.rootNodes as Node[]));
+    this.cellViews.set(key, view);
   }
 
   /** Re-enter Angular for an event emission so zoned and zoneless consumers both update. */
