@@ -211,8 +211,6 @@ export class DtTableDirective<T = unknown> {
   private create(): void {
     const el = this.host.nativeElement;
     const config = this.buildConfig();
-    this.lastOptionsKey = this.structuralKey(this.options());
-    this.lastColumnsKey = this.structuralKey(this.columns());
     this.lastData = this.data();
 
     let api: Api<T>;
@@ -230,6 +228,21 @@ export class DtTableDirective<T = unknown> {
       const container = api.table().container() as HTMLElement | null;
       container?.classList.add(this.styleScope);
     }
+    // **Keyed after construction, not before.** DataTables mutates the column
+    // objects it is handed, adding its legacy Hungarian aliases (`mData`,
+    // `sName`, `bSortable`, …) to each one. Recorded before construction, the
+    // baseline held the clean shape while the very next render pass read the
+    // mutated one off the same objects — so the reconciler saw a column change
+    // that was its own doing, destroyed the table and built it again. For a
+    // server-side table that meant two requests for the first page on every
+    // open, byte-identical, the first answer thrown away.
+    //
+    // Keyed here, the mutation is already in the baseline and nothing but a
+    // genuine input change — which arrives as a fresh, unmutated array — can
+    // differ from it. The options key is unaffected either way (`buildConfig`
+    // copies them), and is recorded here for symmetry.
+    this.lastOptionsKey = this.structuralKey(this.options());
+    this.lastColumnsKey = this.structuralKey(this.columns());
     this._instance.set(api);
     this.bindEvents(api);
     // The initial draw fired during construction (before the draw handler was attached), so mount

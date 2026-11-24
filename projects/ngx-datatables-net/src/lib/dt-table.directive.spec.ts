@@ -92,3 +92,75 @@ describe('DtTableDirective', () => {
     expect(host.dir().instance()).toBeUndefined();
   });
 });
+
+/**
+ * The table is built once, so a server-side table asks for its first page once.
+ *
+ * **It was built twice.** DataTables mutates the column objects it is handed,
+ * adding its legacy Hungarian aliases (`mData`, `sName`, `bSortable`, …). The
+ * reconciler's baseline was recorded *before* construction, so the next render
+ * pass read the mutated shape off those same objects, called it a column
+ * change, and destroyed and rebuilt the table. Every server-side table in every
+ * app queried twice on open, byte-identically, and discarded the first answer.
+ *
+ * Found from a customer's own access log: two `/api/orders` requests in the same
+ * second, every time a grid opened.
+ */
+@Component({
+  imports: [DtTableDirective],
+  template: `
+    <table
+      dtTable
+      [dtColumns]="cols"
+      [dtOptions]="opts()"
+      (dtInit)="inits = inits + 1"
+    >
+      <thead>
+        <tr><th>ID</th><th>Name</th></tr>
+      </thead>
+    </table>
+  `,
+})
+class ServerSideHost {
+  inits = 0;
+  asked = 0;
+  readonly cols: ConfigColumns[] = [
+    { data: 'id', title: 'ID' },
+    { data: 'name', title: 'Name' },
+  ];
+  readonly opts = signal<Config>({
+    serverSide: true,
+    processing: true,
+    ajax: (_data: unknown, callback: (r: unknown) => void) => {
+      this.asked = this.asked + 1;
+      callback({ draw: 1, recordsTotal: 0, recordsFiltered: 0, data: [] });
+    },
+  });
+}
+
+describe('DtTableDirective — built once', () => {
+  beforeEach(() => {
+    TestBed.configureTestingModule({ providers: [provideZonelessChangeDetection()] });
+  });
+
+  it('initializes once and asks the server once', async () => {
+    const fixture = TestBed.createComponent(ServerSideHost);
+    fixture.autoDetectChanges();
+    await fixture.whenStable();
+
+    expect(fixture.componentInstance.inits).toBe(1);
+    expect(fixture.componentInstance.asked).toBe(1);
+  });
+
+  it('stays built across an idle render pass', async () => {
+    const fixture = TestBed.createComponent(ServerSideHost);
+    fixture.autoDetectChanges();
+    await fixture.whenStable();
+
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    expect(fixture.componentInstance.inits).toBe(1);
+    expect(fixture.componentInstance.asked).toBe(1);
+  });
+});

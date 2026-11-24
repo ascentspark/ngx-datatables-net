@@ -3,6 +3,21 @@
 All notable changes to `ngx-datatables-net` are recorded here. Dates are ISO (YYYY-MM-DD). The
 package major tracks the Angular major; see [README](README.md#versions) for the version policy.
 
+## 22.3.1 — 2026-11-24
+
+### Fixed
+
+- **A table was built twice, so a `serverSide: true` table asked for its first page twice.**
+  DataTables mutates the column objects it is handed, adding its legacy Hungarian aliases
+  (`mData`, `sName`, `bSortable`, …) to each one. The reconciler recorded its structural baseline
+  *before* construction, so the very next render pass read the mutated shape off those same
+  objects, called it a column change, and destroyed and rebuilt the table. Every server-side table
+  therefore issued two identical first-page requests on open and threw the first answer away —
+  invisible precisely because both answers agree. The baseline is now recorded after construction,
+  so the mutation is already in it and only a genuine input change (which arrives as a fresh,
+  unmutated array) differs from it. Measured on a server-side host, one change-detection pass:
+  2 initialisations and 2 requests before, 1 and 1 after.
+
 ## 22.3.0 — 2026-09-05
 
 ### Added
